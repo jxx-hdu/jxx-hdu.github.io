@@ -143,6 +143,374 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-spring面试" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/03/02/spring%E9%9D%A2%E8%AF%95/">Spring面试</a>
+    </h1>
+  
+
+        
+        <a href="/2021/03/02/spring%E9%9D%A2%E8%AF%95/" class="archive-article-date">
+  	<time datetime="2021-03-02T11:19:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-解释一下spring-bean的生命周期"><a href="#1-解释一下spring-bean的生命周期" class="headerlink" title="1.解释一下spring bean的生命周期"></a>1.解释一下spring bean的生命周期</h2><p>1.解析类得到BeanDefinition<br>2.如果有多个构造方法，则要推断构造方法<br>3.确定好构造方法后，进行实例化得到一个对象<br>4.对对象中加了@Autowired注解的属性进行填充<br>5.调用afterPropertiesSet()方法，该方法可以对没有加注解的属性进行注入<br>6.调用初始化方法<br>7.调用初始化后的方法，这里会进行AOP<br>9.如果当前创建的bean是单例bean，会把bean放入单例池<br>10.使用bean<br>11.Spring容器关闭时调用DisposableBean中destory()方法  </p>
+<h2 id="2-依赖注入-Autowired与-Resource的区别"><a href="#2-依赖注入-Autowired与-Resource的区别" class="headerlink" title="2.依赖注入@Autowired与@Resource的区别"></a>2.依赖注入@Autowired与@Resource的区别</h2><p>1.@Autowired<br>首先根据类型进行注入，如果根据类型在Spring中找到多个Bean,然后根据是不是符合Qualifier、优先级等进行进一步确认，最后在根据属性名确认。<br>2.@Resource<br>如果@Resource注解指定name属性，则直接从Spring容器中拿对应的Bean，如果不存在则表示没有找到注入对象，然后根据属性名字或setxxx中的xxx在Spring容器中找对应的Bean</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/03/02/spring%E9%9D%A2%E8%AF%95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-网络编程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/03/02/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a>
+    </h1>
+  
+
+        
+        <a href="/2021/03/02/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="archive-article-date">
+  	<time datetime="2021-03-02T03:14:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-计算机网络"><a href="#1-计算机网络" class="headerlink" title="1.计算机网络"></a>1.计算机网络</h1><h1 id="2-网络通信的要素："><a href="#2-网络通信的要素：" class="headerlink" title="2.网络通信的要素："></a>2.网络通信的要素：</h1><h2 id="2-1双方的地址：ip和端口号"><a href="#2-1双方的地址：ip和端口号" class="headerlink" title="2.1双方的地址：ip和端口号"></a>2.1双方的地址：ip和端口号</h2><h2 id="2-2网络协议："><a href="#2-2网络协议：" class="headerlink" title="2.2网络协议："></a>2.2网络协议：</h2><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMyNDk2NjIucG5n?x-oss-process=image/format,png" alt="img"></p>
+<p>TCP：传输控制协议，传输效率低，可靠性强</p>
+<p>UDP：用户数据报协议，适用于传输可靠性要求不高，数据量小的数据（比如QQ）</p>
+<h1 id="3-握手挥手图示"><a href="#3-握手挥手图示" class="headerlink" title="3.握手挥手图示"></a>3.握手挥手图示</h1><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMDI4NDkucG5n?x-oss-process=image/format,png" alt="img"></p>
+<h2 id="3-1三次握手流程"><a href="#3-1三次握手流程" class="headerlink" title="3.1三次握手流程"></a>3.1三次握手流程</h2><p>第一次握手： 建立连接。客户端发送连接请求报文段，将SYN位置为1，Sequence Number为x；然后，客户端进入SYN_SEND状态，等待服务器的确认；</p>
+<p>第二次握手： 服务器收到SYN报文段。服务器收到客户端的SYN报文段，需要对这个SYN报文段进行确认，设置Acknowledgment Number为x+1(Sequence Number+1)；同时，自己自己还要发送SYN请求信息，将SYN位置为1，Sequence Number为y；服务器端将上述所有信息放到一个报文段（即SYN+ACK报文段）中，一并发送给客户端，此时服务器进入SYN_RECV状态；</p>
+<p>第三次握手： 客户端收到服务器的SYN+ACK报文段。然后将Acknowledgment Number设置为y+1，向服务器发送ACK报文段，这个报文段发送完毕以后，客户端和服务器端都进入ESTABLISHED状态，完成TCP三次握手。</p>
+<h2 id="3-2-为什么是三次握手"><a href="#3-2-为什么是三次握手" class="headerlink" title="3.2 为什么是三次握手"></a>3.2 为什么是三次握手</h2><p>为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误。</p>
+<p>具体例子：“已失效的连接请求报文段”的产生在这样一种情况下：client发出的第一个连接请求报文段并没有丢失，而是在某个网络结点长时间的滞留了，以致延误到连接释放以后的某个时间才到达server。本来这是一个早已失效的报文段。但server收到此失效的连接请求报文段后，就误认为是client再次发出的一个新的连接请求。于是就向client发出确认报文段，同意建立连接。假设不采用“三次握手”，那么只要server发出确认，新的连接就建立了。由于现在client并没有发出建立连接的请求，因此不会理睬server的确认，也不会向server发送数据。但server却以为新的运输连接已经建立，并一直等待client发来数据。这样，server的很多资源就白白浪费掉了。采用“三次握手”的办法可以防止上述现象发生。例如刚才那种情况，client不会向server的确认发出确认。server由于收不到确认，就知道client并没有要求建立连接。”</p>
+<h2 id="3-3-四次挥手流程"><a href="#3-3-四次挥手流程" class="headerlink" title="3.3 四次挥手流程"></a>3.3 四次挥手流程</h2><p>第一次分手： 主机1（可以使客户端，也可以是服务器端），设置Sequence Number，向主机2发送一个FIN报文段；此时，主机1进入FIN_WAIT_1状态；这表示主机1没有数据要发送给主机2了；</p>
+<p>第二次分手： 主机2收到了主机1发送的FIN报文段，向主机1回一个ACK报文段，Acknowledgment Number为Sequence Number加1；主机1进入FIN_WAIT_2状态；主机2告诉主机1，我“同意”你的关闭请求；</p>
+<p>第三次分手： 主机2向主机1发送FIN报文段，请求关闭连接，同时主机2进入LAST_ACK状态；</p>
+<p>第四次分手： 主机1收到主机2发送的FIN报文段，向主机2发送ACK报文段，然后主机1进入TIME_WAIT状态；主机2收到主机1的ACK报文段以后，就关闭连接；此时，主机1等待2MSL后依然没有收到回复，则证明Server端已正常关闭，那好，主机1也可以关闭连接了。</p>
+<h2 id="3-4-为什么是4次挥手"><a href="#3-4-为什么是4次挥手" class="headerlink" title="3.4 为什么是4次挥手"></a>3.4 为什么是4次挥手</h2><p>TCP协议是一种面向连接的、可靠的、基于字节流的运输层通信协议。TCP是全双工模式，这就意味着，当主机1发出FIN报文段时，只是表示主机1已经没有数据要发送了，主机1告诉主机2，它的数据已经全部发送完毕了；但是，这个时候主机1还是可以接受来自主机2的数据；当主机2返回ACK报文段时，表示它已经知道主机1没有数据发送了，但是主机2还是可以发送数据到主机1的；当主机2也发送了FIN报文段时，这个时候就表示主机2也没有数据要发送了，就会告诉主机1，我也没有数据要发送了，之后彼此就会愉快的中断这次TCP连接。</p>
+<h1 id="4为什么要等待2MSL？"><a href="#4为什么要等待2MSL？" class="headerlink" title="4为什么要等待2MSL？"></a>4为什么要等待2MSL？</h1><p>MSL：报文段最大生存时间，它是任何报文段被丢弃前在网络内的最长时间。</p>
+<p>原因有二：</p>
+<p>保证TCP协议的全双工连接能够可靠关闭</p>
+<p>保证这次连接的重复数据段从网络中消失</p>
+<p>第一点：如果主机1直接CLOSED了，那么由于IP协议的不可靠性或者是其它网络原因，导致主机2没有收到主机1最后回复的ACK。那么主机2就会在超时之后继续发送FIN，此时由于主机1已经CLOSED了，就找不到与重发的FIN对应的连接。所以，主机1不是直接进入CLOSED，而是要保持TIME_WAIT，当再次收到FIN的时候，能够保证对方收到ACK，最后正确的关闭连接。</p>
+<p>第二点：如果主机1直接CLOSED，然后又再向主机2发起一个新连接，我们不能保证这个新连接与刚关闭的连接的端口号是不同的。也就是说有可能新连接和老连接的端口号是相同的。一般来说不会发生什么问题，但是还是有特殊情况出现：假设新连接和已经关闭的老连接端口号是一样的，如果前一次连接的某些数据仍然滞留在网络中，这些延迟数据在建立新连接之后才到达主机2，由于新连接和老连接的端口号是一样的，TCP协议就认为那个延迟的数据是属于新连接的，这样就和真正的新连接的数据包发生混淆了。所以TCP连接还要在TIME_WAIT状态等待2倍MSL，这样可以保证本次连接的所有数据都从网络中消失。</p>
+<h3 id="5-流量控制"><a href="#5-流量控制" class="headerlink" title="5 流量控制"></a>5 流量控制</h3><p>如果发送方把数据发送得过快，接收方可能会来不及接收，这就会造成数据的丢失。所谓流量控制就是让发送方的发送速率不要太快，要让接收方来得及接收。</p>
+<p>利用滑动窗口机制可以很方便地在TCP连接上实现对发送方的流量控制。</p>
+<p>设A向B发送数据。在连接建立时，B告诉了A：“我的接收窗口是 rwnd = 400 ”(这里的 rwnd 表示 receiver window) 。因此，发送方的发送窗口不能超过接收方给出的接收窗口的数值。请注意，TCP的窗口单位是字节，不是报文段。假设每一个报文段为100字节长，而数据报文段序号的初始值设为1。大写ACK表示首部中的确认位ACK，小写ack表示确认字段的值ack。</p>
+<p> <img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMDc3MzkucG5n?x-oss-process=image/format,png" alt="img"></p>
+<p>从图中可以看出，B进行了三次流量控制。第一次把窗口减少到 rwnd = 300 ，第二次又减到了 rwnd = 100 ，最后减到 rwnd = 0 ，即不允许发送方再发送数据了。这种使发送方暂停发送的状态将持续到主机B重新发出一个新的窗口值为止。B向A发送的三个报文段都设置了 ACK = 1 ，只有在ACK=1时确认号字段才有意义。</p>
+<p>TCP为每一个连接设有一个持续计时器(persistence timer)。只要TCP连接的一方收到对方的零窗口通知，就启动持续计时器。若持续计时器设置的时间到期，就发送一个零窗口控测报文段（携1字节的数据），那么收到这个报文段的一方就重新设置持续计时器。</p>
+<h3 id="6-TCP拥塞控制"><a href="#6-TCP拥塞控制" class="headerlink" title="6.TCP拥塞控制"></a>6.TCP拥塞控制</h3><p><strong><em>*</em>***慢开始和拥塞避免******</strong></p>
+<p>发送方维持一个拥塞窗口 cwnd ( congestion window )的状态变量。拥塞窗口的大小取决于网络的拥塞程度，并且动态地在变化。发送方让自己的发送窗口等于拥塞窗口。</p>
+<p>发送方控制拥塞窗口的原则是：只要网络没有出现拥塞，拥塞窗口就再增大一些，以便把更多的分组发送出去。但只要网络出现拥塞，拥塞窗口就减小一些，以减少注入到网络中的分组数。</p>
+<p><strong><em>*</em>***慢开始算法******</strong></p>
+<p>当主机开始发送数据时，如果立即所大量数据字节注入到网络，那么就有可能引起网络拥塞，因为现在并不清楚网络的负荷情况。</p>
+<p>因此，较好的方法是 先探测一下，即由小到大逐渐增大发送窗口，也就是说，由小到大逐渐增大拥塞窗口数值。</p>
+<p>通常在刚刚开始发送报文段时，先把拥塞窗口 cwnd 设置为一个最大报文段MSS的数值。而在每收到一个对新的报文段的确认后，把拥塞窗口增加至多一个MSS的数值。用这样的方法逐步增大发送方的拥塞窗口 cwnd ，可以使分组注入到网络的速率更加合理。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMTQ1NTgucG5n?x-oss-process=image/format,png" alt="img"></p>
+<p>每经过一个传输轮次，拥塞窗口 cwnd 就加倍。一个传输轮次所经历的时间其实就是往返时间RTT。不过“传输轮次”更加强调：把拥塞窗口cwnd所允许发送的报文段都连续发送出去，并收到了对已发送的最后一个字节的确认。</p>
+<p>另，慢开始的“慢”并不是指cwnd的增长速率慢，而是指在TCP开始发送报文段时先设置cwnd=1，使得发送方在开始时只发送一个报文段（目的是试探一下网络的拥塞情况），然后再逐渐增大cwnd。</p>
+<p>为了防止拥塞窗口cwnd增长过大引起网络拥塞，还需要设置一个慢开始门限ssthresh状态变量。慢开始门限ssthresh的用法如下：</p>
+<p>当 cwnd &lt; ssthresh 时，使用上述的慢开始算法。</p>
+<p>当 cwnd &gt; ssthresh 时，停止使用慢开始算法而改用拥塞避免算法。</p>
+<p>当 cwnd = ssthresh 时，既可使用慢开始算法，也可使用拥塞控制避免算法。</p>
+<h3 id="2-快重传和快恢复"><a href="#2-快重传和快恢复" class="headerlink" title="****2.快重传和快恢复******"></a><strong><em>*</em>***2.快重传和快恢复******</strong></h3><p><strong><em>*</em>***快重传******</strong></p>
+<p>快重传算法首先要求接收方每收到一个失序的报文段后就立即发出重复确认（为的是使发送方及早知道有报文段没有到达对方）而不要等到自己发送数据时才进行捎带确认。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMTY5NTUucG5n?x-oss-process=image/format,png" alt="img"></p>
+<p>接收方收到了M1和M2后都分别发出了确认。现在假定接收方没有收到M3但接着收到了M4。</p>
+<p>显然，接收方不能确认M4，因为M4是收到的失序报文段。根据 可靠传输原理，接收方可以什么都不做，也可以在适当时机发送一次对M2的确认。</p>
+<p>但按照快重传算法的规定，接收方应及时发送对M2的重复确认，这样做可以让 发送方及早知道报文段M3没有到达接收方。发送方接着发送了M5和M6。接收方收到这两个报文后，也还要再次发出对M2的重复确认。这样，发送方共收到了 接收方的四个对M2的确认，其中后三个都是重复确认。</p>
+<p>快重传算法还规定，发送方只要一连收到三个重复确认就应当立即重传对方尚未收到的报文段M3，而不必 继续等待M3设置的重传计时器到期。</p>
+<p>由于发送方尽早重传未被确认的报文段，因此采用快重传后可以使整个网络吞吐量提高约20%。</p>
+<p><strong><em>*</em>***快恢复******</strong></p>
+<p>与快重传配合使用的还有快恢复算法，其过程有以下两个要点：</p>
+<p>当发送方连续收到三个重复确认，就执行“乘法减小”算法，把慢开始门限ssthresh减半。</p>
+<p>与慢开始不同之处是现在不执行慢开始算法（即拥塞窗口cwnd现在不设置为1），而是把cwnd值设置为 慢开始门限ssthresh减半后的数值，然后开始执行拥塞避免算法（“加法增大”），使拥塞窗口缓慢地线性增大。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMTgwNTkucG5n?x-oss-process=image/format,png" alt="img"></p>
+<h2 id="五、HTTP协议"><a href="#五、HTTP协议" class="headerlink" title="****五、HTTP协议******"></a><strong><em>*</em>***五、HTTP协议******</strong></h2><h3 id="1-http请求报文"><a href="#1-http请求报文" class="headerlink" title="\1.http请求报文**"></a><strong><em>\</em>1.http请求报文**</strong></h3><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMjAwOTAucG5n?x-oss-process=image/format,png" alt="img"></p>
+<h3 id="2-http响应报文"><a href="#2-http响应报文" class="headerlink" title="\2.http响应报文**"></a><strong><em>\</em>2.http响应报文**</strong></h3><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMjc1MjIucG5n?x-oss-process=image/format,png" alt="img"></p>
+<h3 id="3-method-请求方法，标明客户端希望服务器对资源执行的动作"><a href="#3-method-请求方法，标明客户端希望服务器对资源执行的动作" class="headerlink" title="\3.method: 请求方法，标明客户端希望服务器对资源执行的动作**"></a><strong><em>\</em>3.method: 请求方法，标明客户端希望服务器对资源执行的动作**</strong></h3><ul>
+<li>GET：从服务器获取一个资源</li>
+<li>HEAD：只从服务器获取文档的响应首部</li>
+<li>POST：向服务器输入数据，通常会再由网关程序继续处理</li>
+<li>PUT：将请求的主体部分存储在服务器中，如上传文件</li>
+<li>DELETE：请求删除服务器上指定的文档</li>
+<li>TRACE：追踪请求到达服务器中间经过的代理服务器</li>
+<li>OPTIONS：请求服务器返回对指定资源支持使用的请求方法</li>
+</ul>
+<h3 id="4-status：标记请求处理过程中发生的情况，如200，301-302-404-502"><a href="#4-status：标记请求处理过程中发生的情况，如200，301-302-404-502" class="headerlink" title="\4.status：标记请求处理过程中发生的情况，如200，301, 302, 404, 502**"></a><strong><em>\</em>4.status：标记请求处理过程中发生的情况，如200，301, 302, 404, 502**</strong></h3><ul>
+<li>200： 成功，请求数据通过响应报文的entity-body部分发送；OK</li>
+<li>301： 请求的URL指向的资源已经被删除；但在响应报文中通过首部Location指明了资源现在所处的新位置；Moved Permanently</li>
+<li>302： 响应报文Location指明资源临时新位置；Moved Temporarily</li>
+<li>304： 客户端发出了条件式请求，但服务器上的资源未曾发生改变，则通过响应此响应状态码通知客户端；Not Modified</li>
+<li>401： 需要输入账号和密码认证方能访问资源；Unauthorized</li>
+<li>403： 请求被禁止；Forbidden</li>
+<li>404： 服务器无法找到客户端请求的资源；Not Found</li>
+<li>500： 服务器内部错误；Internal Server Error</li>
+<li>502： 代理服务器从后端服务器收到了一条伪响应，如无法连接到网关；Bad Gateway</li>
+<li>503： 服务不可用，临时服务器维护或过载，服务器无法处理请求</li>
+<li>504： 网关超时</li>
+</ul>
+<h3 id="5-HTTP-首部字段"><a href="#5-HTTP-首部字段" class="headerlink" title="\5.HTTP 首部字段**"></a><strong><em>\</em>5.HTTP 首部字段**</strong></h3><p>HTTP 首部字段包含的信息最为丰富。首部字段同时存在于请求和响应报文内，并涵盖 HTTP 报文相关的内容信息。使用首部字段是为了给客服端和服务器端提供报文主体大小、所使用的语言、认证信息等内容；</p>
+<p>首部字段结构HTTP 首部字段是由首部字段名和字段值构成的，中间用冒号“:”分隔；</p>
+<p>字段值对应单个 HTTP 首部字段可以有多个值；</p>
+<p>报文首部中出现了两个或以上具有相同首部字段名的首部字段时，在规范内尚未明确，根据浏览器内部处理逻辑的不同，优先处理的顺序可能不同，结果可能并不一致。</p>
+<p>通用首部:请求报文和响应报文两方都会使用的首部</p>
+<ul>
+<li>Date：报文的创建时间</li>
+<li>Connection：连接状态，如keep-alive, close</li>
+<li>Via：显示报文经过的中间节点（代理，网关）</li>
+<li>Cache-Control：控制缓存，如缓存时长</li>
+<li>MIME-Version：发送端使用的MIME版本</li>
+<li>Warning：错误通知</li>
+</ul>
+<p>请求首部:从客户端向服务器端发送请求报文时使用的首部。补充了请求的附加内容、客户端信息、请求内容相关优先级等信息</p>
+<p><strong><em>\</em>5.1请求首部：**</strong></p>
+<ul>
+<li>Accept：通知服务器自己可接受的媒体类型</li>
+<li>Accept-Charset： 客户端可接受的字符集</li>
+<li>Accept-Encoding：客户端可接受编码格式，如gzip</li>
+<li>Accept-Language：客户端可接受的语言</li>
+<li>Client-IP: 请求的客户端IP</li>
+<li>Host: 请求的服务器名称和端口号</li>
+<li>Referer：跳转至当前URI的前一个URL</li>
+<li>User-Agent：客户端代理，浏览器版本</li>
+</ul>
+<p><strong><em>\</em>5.2代理请求首部：**</strong></p>
+<ul>
+<li>Proxy-Authorization：向代理服务器认证</li>
+<li>响应首部：从服务器端向客户端返回响应报文时使用的首部。补充了响应的附加内容，也会要求客户端附加额外的内容信</li>
+<li>Age：从最初创建开始，响应持续时长</li>
+<li>Server：服务器程序软件名称和版本</li>
+<li>协商首部：某资源有多种表示方法时使用</li>
+<li>Accept-Ranges：服务器可接受的请求范围类型</li>
+<li>Vary：服务器查看的其它首部列表</li>
+<li>Set-Cookie：向客户端设置cookie</li>
+<li>Set-Cookie2: 以上面相似</li>
+<li>WWW-Authenticate：来自服务器对客户端的质询列表</li>
+</ul>
+<p><strong><em>\</em>5.3实体首部：针对请求报文和响应报文的实体部分使用的首部。**</strong></p>
+<p>补充了资源内容更新时间等与实体有关的的信息</p>
+<ul>
+<li>Location：告诉客户端真正的实体位于何处</li>
+<li>Content-Encoding:对主体执行的编码</li>
+<li>Content-Language:理解主体时最适合的语言</li>
+<li>Content-Length: 主体的长度</li>
+<li>Content-Location: 实体真正所处位置</li>
+<li>Content-Type：主体的对象类型，如text</li>
+</ul>
+<p>缓存相关：</p>
+<ul>
+<li>ETag：实体的扩展标签</li>
+<li>Expires：实体的过期时间</li>
+<li>Last-Modified：最后一次修改的时间</li>
+</ul>
+<p><strong><em>\</em>5.4扩展首部Cookie**</strong></p>
+<p>HTTP 是一种无状态协议。协议自身不对请求和响应之间的通信状态进行保存。也就是说在 HTTP 这个级别，协议对于发送过的请求或响应都不做持久化处理。这是为了更快地处理大量事务，确保协议的可伸缩性，而特意把 HTTP 协议设计成如此简单的。可是随着 Web 的不断发展，很多业务都需要对通信状态进行保存。于是引入了 Cookie 技术。使用 Cookie 的状态管理Cookie 技术通过在请求和响应报文中写入 Cookie 信息来控制客户端的状态。Cookie 会根据从服务器端发送的响应报文内的一个叫做 Set-Cookie 的首部字段信息，通知客户端保存Cookie。当下次客户端再往该服务器发送请求时，客户端会自动在请求报文中加入 Cookie 值后发送出去。服务器端发现客户端发送过来的 Cookie 后，会去检查究竟是从哪一个客户端发来的连接请求，然后对比服务器上的记录，最后得到之前的状态信息</p>
+<h3 id="6-图示为http跟踪流实例，可以很好的了解一个http的请求和响应流程"><a href="#6-图示为http跟踪流实例，可以很好的了解一个http的请求和响应流程" class="headerlink" title="\6.图示为http跟踪流实例，可以很好的了解一个http的请求和响应流程**"></a><strong><em>\</em>6.图示为http跟踪流实例，可以很好的了解一个http的请求和响应流程**</strong></h3><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMjc1NjIucG5n?x-oss-process=image/format,png" alt="img"></p>
+<h3 id="7-Get请求抓包情况"><a href="#7-Get请求抓包情况" class="headerlink" title="\7.Get请求抓包情况**"></a><strong><em>\</em>7.Get请求抓包情况**</strong></h3><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMjgwNjgucG5n?x-oss-process=image/format,png" alt="img"></p>
+<h3 id="8-Post请求抓包情况，和get请求不一样的是post的数据是放到了包体部分，而get请求是放到了heads里面"><a href="#8-Post请求抓包情况，和get请求不一样的是post的数据是放到了包体部分，而get请求是放到了heads里面" class="headerlink" title="\8.Post请求抓包情况，和get请求不一样的是post的数据是放到了包体部分，而get请求是放到了heads里面**"></a><strong><em>\</em>8.Post请求抓包情况，和get请求不一样的是post的数据是放到了包体部分，而get请求是放到了heads里面**</strong></h3><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9nYW1lYm95cy5vc3MtY24tc2hlbnpoZW4uYWxpeXVuY3MuY29tL29uZWJsb2cvMjAxOTA4MTkyMTMzMjkyNjcucG5n?x-oss-process=image/format,png" alt="img"></p>
+<h2 id="六、Wireshark常用过滤使用方法"><a href="#六、Wireshark常用过滤使用方法" class="headerlink" title="****六、Wireshark常用过滤使用方法******"></a><strong><em>*</em>***<a target="_blank" rel="noopener" href="https://www.gameboys.cn/article/38">六、Wireshark常用过滤使用方法</a>******</strong></h2><h3 id="1-过滤IP"><a href="#1-过滤IP" class="headerlink" title="\1.过滤IP**"></a><strong><em>\</em>1.过滤IP**</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">如来源IP或者目标IP等于某个IP</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ip.src eq 192.168.1.107 or ip.dst eq 192.168.1.107</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ip.addr eq 192.168.1.107 &#x2F;&#x2F; 都能显示来源IP和目标IP</span><br></pre></td></tr></table></figure>
+<h3 id="2-过滤端口"><a href="#2-过滤端口" class="headerlink" title="\2.过滤端口**"></a><strong><em>\</em>2.过滤端口**</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">tcp.port eq 80 &#x2F;&#x2F; 不管端口是来源的还是目标的都显示</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp.port &#x3D;&#x3D; 80</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp.port eq 2722</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp.port eq 80 or udp.port eq 80</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp.dstport &#x3D;&#x3D; 80 &#x2F;&#x2F; 只显tcp协议的目标端口80</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp.srcport &#x3D;&#x3D; 80 &#x2F;&#x2F; 只显tcp协议的来源端口80</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">udp.port eq 15000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">过滤端口范围</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp.port &gt;&#x3D; 1 and tcp.port &lt;&#x3D; 80</span><br></pre></td></tr></table></figure>
+<h3 id="3-过滤协议"><a href="#3-过滤协议" class="headerlink" title="\3.过滤协议**"></a><strong><em>\</em>3.过滤协议**</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tcp、udp、arp、icmp、http、smtp、ftp、dns、msnms、ssl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">排除arp包，如!arp   或者   not arp</span><br></pre></td></tr></table></figure>
+<p>4.过滤MAC</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">太以网头过滤</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">eth.dst &#x3D;&#x3D; A0:00:00:04:C5:84 &#x2F;&#x2F; 过滤目标mac</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">eth.src eq A0:00:00:04:C5:84 &#x2F;&#x2F; 过滤来源mac</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">eth.dst&#x3D;&#x3D;A0:00:00:04:C5:84</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">eth.dst&#x3D;&#x3D;A0-00-00-04-C5-84</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">eth.addr eq A0:00:00:04:C5:84 &#x2F;&#x2F; 过滤来源MAC和目标MAC都等于A0:00:00:04:C5:84的</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less than 小于 &lt; lt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">小于等于 le</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">等于 eq</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">大于 gt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">大于等于 ge</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">不等 ne</span><br></pre></td></tr></table></figure>
+<h3 id="5-包长度过滤"><a href="#5-包长度过滤" class="headerlink" title="\5.包长度过滤**"></a><strong><em>\</em>5.包长度过滤**</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">udp.length &#x3D;&#x3D; 26 这个长度是指udp本身固定长度8加上udp下面那块数据包之和</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp.len &gt;&#x3D; 7   指的是ip数据包(tcp下面那块数据),不包括tcp本身</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ip.len &#x3D;&#x3D; 94 除了以太网头固定长度14,其它都算是ip.len,即从ip本身到最后</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">frame.len &#x3D;&#x3D; 119 整个数据包长度,从eth开始到最后</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">eth ---&gt; ip or arp ---&gt; tcp or udp ---&gt; data</span><br></pre></td></tr></table></figure>
+<h3 id="6-http模式过滤"><a href="#6-http模式过滤" class="headerlink" title="\6.http模式过滤**"></a><strong><em>\</em>6.http模式过滤**</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">http.request.method &#x3D;&#x3D; &quot;GET&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http.request.method &#x3D;&#x3D; &quot;POST&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http.request.uri &#x3D;&#x3D; &quot;&#x2F;img&#x2F;logo-edu.gif&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http contains &quot;GET&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http contains &quot;HTTP&#x2F;1.&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; GET包</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http.request.method &#x3D;&#x3D; &quot;GET&quot; &amp;&amp; http contains &quot;Host: &quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http.request.method &#x3D;&#x3D; &quot;GET&quot; &amp;&amp; http contains &quot;User-Agent: &quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; POST包</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http.request.method &#x3D;&#x3D; &quot;POST&quot; &amp;&amp; http contains &quot;Host: &quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http.request.method &#x3D;&#x3D; &quot;POST&quot; &amp;&amp; http contains &quot;User-Agent: &quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 响应包</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http contains &quot;HTTP&#x2F;1.1 200 OK&quot; &amp;&amp; http contains &quot;Content-Type: &quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http contains &quot;HTTP&#x2F;1.0 200 OK&quot; &amp;&amp; http contains &quot;Content-Type: &quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">一定包含如下</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Content-Type:</span><br></pre></td></tr></table></figure>
+<h3 id="7-TCP参数过滤"><a href="#7-TCP参数过滤" class="headerlink" title="\7.TCP参数过滤**"></a><strong><em>\</em>7.TCP参数过滤**</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tcp.flags 显示包含TCP标志的封包。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp.flags.syn &#x3D;&#x3D; 0x02     显示包含TCP SYN标志的封包。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tcp.window_size &#x3D;&#x3D; 0 &amp;&amp; tcp.flags.reset !&#x3D; 1</span><br></pre></td></tr></table></figure>
+<p>面试中网络方面的知识被问到的概率很大，尤其是互联网公司，要熟悉<strong>osi</strong>七层模型，其中TCP/IP方面的知识尤其重要。如果自己平时有Socket编程的经验对面试也是很有帮助的。网络方面有空可以看看<strong>TCP/IP详解卷一和UNIX网络编程。</strong>以下总结了一些面试中常问的问题：</p>
+<p><strong>1、TCP为什么需要3次握手，4次断开？</strong></p>
+<p>“三次握手”的目的是“为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误”。 client发出的第一个连接请求报文段并没有丢失，而是在某个网络结点长时间的滞留了，以致延误到连接释放以后的某个时间才到达server。本来这是一个早已失效的报文段。但server收到此失效的连接请求报文段后，就误认为是client再次发出的一个新的连接请求。于是就向client发出确认报文段，同意建立连接。假设不采用“三次握手”，那么只要server发出确认，新的连接就建立了。由于现在client并没有发出建立连接的请求，因此不会理睬server的确认，也不会向server发送数据。但server却以为新的运输连接已经建立，并一直等待client发来数据。这样，server的很多资源就白白浪费掉了。采用“三次握手”的办法可以防止上述现象发生。例如刚才那种情况，client不会向server的确认发出确认。server由于收不到确认，就知道client并没有要求建立连接。”。主要目的防止server端一直等待，浪费资源。</p>
+<p><strong>为什么4次断开？</strong></p>
+<p>因为TCP有个半关闭状态，假设A.B要释放连接，那么A发送一个释放连接报文给B，B收到后发送确认，这个时候A不发数据，但是B如果发数据A还是要接受，这叫半关闭。然后B还要发给A连接释放报文，然后A发确认，所以是4次。</p>
+<p>在tcp连接握手时为何ACK是和SYN一起发送，这里ACK却没有和FIN一起发送呢。原因是因为tcp是<strong>全双工模式</strong>，<strong>接收到FIN时意味将没有数据再发来，但是还是可以继续发送数据。</strong></p>
+<p><strong>2、TCP和UDP有什么区别？</strong></p>
+<p>TCP是传输控制协议，提供的是面向连接、可靠的字节流服务。通信双方彼此交换数据前，必须先通过三次握手协议建立连接，之后才能传输数据。TCP提供超时重传，丢弃重复数据，检验数据，流量控制等功能，保证数据能从一端传到另一端。UDP是用户数据报协议，是一个简单的面向无连接的协议。UDP不提供可靠的服务。在数据数据前不用建立连接故而传输速度很快。UDP主要用户流媒体传输，IP电话等对数据可靠性要求不是很高的场合。</p>
+<p><strong>3、交换机与路由器有什么区别？</strong></p>
+<p>①工作所处的OSI层次不一样，交换机工作在OSI第二层数据链路层，路由器工作在OSI第三层网络层</p>
+<p>②寻址方式不同：交换机根据MAC地址寻址，路由器根据IP地址寻址</p>
+<p>③转发速不同：交换机的转发速度快，路由器转发速度相对较慢。</p>
+<p><strong>3、TCP/IP的流量控制？</strong></p>
+<p><strong>利用滑动窗口实现流量控制</strong>，如果发送方把数据发送得过快，接收方可能会来不及接收，这就会造成数据的丢失。所谓<strong>流量控制</strong>就是让发送方的发送速率不要太快，要让接收方来得及接收。</p>
+<p> TCP为每一个连接设有一个持续计时器(persistence timer)。只要TCP连接的一方收到对方的零窗口通知，就启动持续计时器。若持续计时器设置的时间到期，就发送一个零窗口控测报文段（携1字节的数据），那么收到这个报文段的一方就重新设置持续计时器。</p>
+<p><strong>4、TCP拥塞控制？</strong></p>
+<p><strong>防止过多的数据注入到网络中，这样可以使网络中的路由器或链路不致过载。</strong>拥塞控制所要做的都有一个<strong>前提：网络能够承受现有的网络负荷。</strong>拥塞控制是一个<strong>全局性的过程</strong>，涉及到所有的主机、路由器，以及与降低网络传输性能有关的所有因素。</p>
+<p> <strong>拥塞控制代价</strong>：需要获得网络内部流量分布的信息。在实施拥塞控制之前，还需要在结点之间交换信息和各种命令，以便选择控制的策略和实施控制。这样就产生了额外的开销。拥塞控制还需要将一些资源分配给各个用户单独使用，使得网络资源不能更好地实现共享。</p>
+<p><strong>几种拥塞控制方法：</strong></p>
+<p>慢开始(slow-start )、拥塞避免(congestion avoidance )、快重传( fastretransmit )和快恢复( fastrecovery )。</p>
+<p><strong>慢开始和拥塞避免</strong></p>
+<p>发送方维持一个拥塞窗口cwnd ( congestion window )的状态变量。拥塞窗口的大小取决于网络的拥塞程度，并且动态地在变化。发送方让自己的发送窗口等于拥塞窗口。<br>  发送方控制拥塞窗口的原则是：只要网络没有出现拥塞，拥塞窗口就再增大一些，以便把更多的分组发送出去。但只要网络出现拥塞，拥塞窗口就减小一些，以减少注入到网络中的分组数。<br>  <strong>慢开始算法</strong>：当主机开始发送数据时，如果立即把大量数据字节注入到网络，那么就有可能引起网络拥塞，因为现在并不清楚网络的负荷情况。因此，较好的方法是先探测一下，即由小到大逐渐增大发送窗口，也就是说，由小到大逐渐增大拥塞窗口数值。通常在刚刚开始发送报文段时，先把拥塞窗口 cwnd 设置为一个最大报文段MSS的数值。而在每收到一个对新的报文段的确认后，把拥塞窗口增加至多一个MSS的数值。用这样的方法逐步增大发送方的拥塞窗口 cwnd ，可以使分组注入到网络的速率更加合理。</p>
+<p>每经过一个传输轮次，拥塞窗口 cwnd 就加倍。一个传输轮次所经历的时间其实就是往返时间RTT。不过“传输轮次”更加强调：把拥塞窗口cwnd所允许发送的报文段都连续发送出去，并收到了对已发送的最后一个字节的确认。<br>另，慢开始的“慢”并不是指cwnd的增长速率慢，而是指在TCP开始发送报文段时先设置cwnd=1，使得发送方在开始时只发送一个报文段（目的是试探一下网络的拥塞情况），然后再逐渐增大cwnd。<br>  为了防止拥塞窗口cwnd增长过大引起网络拥塞，还需要设置一个慢开始门限ssthresh状态变量（如何设置ssthresh）。慢开始门限ssthresh的用法如下：<br>  当 cwnd &lt; ssthresh 时，使用上述的慢开始算法。<br>  当 cwnd &gt; ssthresh 时，停止使用慢开始算法而改用拥塞避免算法。<br>  当 cwnd = ssthresh 时，既可使用慢开始算法，也可使用拥塞控制避免算法。<br>拥塞避免算法：让拥塞窗口cwnd缓慢地增大，即每经过一个往返时间RTT就把发送方的拥塞窗口cwnd加1，而不是加倍。这样拥塞窗口cwnd按线性规律缓慢增长，比慢开始算法的拥塞窗口增长速率缓慢得多。<br>  无论在慢开始阶段还是在拥塞避免阶段，只要发送方判断网络出现拥塞（其根据就是没有收到确认），就要把慢开始门限ssthresh设置为出现拥塞时的发送方窗口值的一半（但不能小于2）。然后把拥塞窗口cwnd重新设置为1，执行慢开始算法。这样做的目的就是要迅速减少主机发送到网络中的分组数，使得发生拥塞的路由器有足够时间把队列中积压的分组处理完毕。过程图如下：</p>
+<p><img src="https://img-blog.csdn.net/20151223100408931?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<p><strong><img src="http://blog.csdn.net/u013408431/article/details/62442670?locationNum=10&fps=1" alt="img"></strong></p>
+<p><strong>快速重传：</strong></p>
+<p>那就是收到3个相同的ACK。TCP在收到乱序到达包时就会立即发送ACK，TCP利用3个相同的ACK来判定数据包的丢失，此时进行快速重传，快速重传做的事情有：</p>
+<p>\1.   把ssthresh设置为cwnd的一半</p>
+<p>\2.   把cwnd再设置为ssthresh的值(具体实现有些为ssthresh+3)</p>
+<p>3.重新进入拥塞避免阶段。</p>
+<p><strong>快速恢复：</strong></p>
+<p>\1. 当收到3个重复ACK时，把ssthresh设置为cwnd的一半，把cwnd设置为ssthresh的值加3，然后重传丢失的报文段，加3的原因是因为收到3</p>
+<p>\2. 再收到重复的ACK时，拥塞窗口增加1。</p>
+<p>\3. 收到新的数据包的ACK时，把cwnd设置为第一步中的ssthresh的值。原因是因为该ACK确认了新的数据，说明从重复ACK时的数据都已收到，该恢复过程已经结束，可以回到恢复之前的状态了，也即再次进入拥塞避免状态。</p>
+<p><strong>5、ARP是地址解析协议，简单语言解释一下工作原理。</strong></p>
+<p>(1)首先，每个主机都会在自己的ARP缓冲区中建立一个ARP列表，以表示IP地址和MAC地址之间的对应关系。</p>
+<p>（2）当源主机要发送数据时，首先检查ARP列表中是否有对应IP地址的目的主机的MAC地址，如果有，则直接发送数据，如果没有，就向本网段的所有主机发送ARP数据包，该数据包包括的内容有：源主机IP地址，源主机MAC地址，目的主机的IP地址。</p>
+<p>（3）当本网络的所有主机收到该ARP数据包时，首先检查数据包中的IP地址是否是自己的IP地址，如果不是，则忽略该数据包，如果是，则首先从数据包中取出源主机的IP和MAC地址写入到ARP列表中，如果已经存在，则覆盖，然后将自己的MAC地址写入ARP响应包中，告诉源主机自己是它想要找的MAC地址。</p>
+<p>（4）源主机收到ARP响应包后。将目的主机的IP和MAC地址写入ARP列表，并利用此信息发送数据。如果源主机一直没有收到ARP响应数据包，表示ARP查询失败。</p>
+<p>广播发送ARP请求，单播发送ARP响应。</p>
+<p><strong>6、ICMP协议？</strong></p>
+<p>ICMP是InternetControl Message Protocol，因特网控制报文协议。它是TCP/IP协议族的一个子协议，用于在IP主机、路由器之间传递控制消息。控制消息是指网络通不通、主机是否可达、路由器是否可用等网络本身的消息。这些控制消息虽然并不传输用户数据，但是对于用户数据的传递起着重要的作用。ICMP报文有两种：差错报告报文和询问报文。</p>
+<p><strong>7、DHCP协议？</strong></p>
+<p>动态主机配置协议，是一种让系统得以连接到网络上，并获取所需要的配置参数手段。通常被应用在大型的局域网络环境中，主要作用是集中的管理、分配IP地址，使网络环境中的主机动态的获得IP地址、Gateway地址、DNS服务器地址等信息，并能够提升地址的使用率。</p>
+<p><strong>8、网桥的作用？</strong></p>
+<p>网桥是一个局域网与另一个局域网之间建立连接的桥梁</p>
+<p><strong>9、数据链路层协议可能提供的服务？</strong></p>
+<p>成帧、链路访问、透明传输、可靠交付、流量控制、差错检测、差错纠正、半双工和全双工。最重要的是帧定界（成帧）、透明传输以及差错检测。</p>
+<p><strong>10、网络接口卡（网卡）的功能？</strong></p>
+<p>（1）进行串行/并行转换。</p>
+<p>（2）对数据进行缓存。</p>
+<p>（3）在计算机的操作系统安装设备驱动程序。</p>
+<p>（4）实现以太网协议。</p>
+<p><strong>11、私有（保留）地址？</strong></p>
+<p>A类：10.0.0.0——10.255.255.255</p>
+<p>​    B类：172.16.0.0——172.31.255.255</p>
+<p>​    C类：192.168.0.0——192.168.255.255</p>
+<p><strong>12、TTL是什么？作用是什么？哪些工具会用到它（ping traceroute ifconfig netstat）？</strong></p>
+<p>TTL是指生存时间，简单来说，它表示了数据包在网络中的时间，经过一个路由器后TTL就减一，这样TTL最终会减为0，当TTL为0时，则将数据包丢弃，这样也就是因为两个路由器之间可能形成环，如果没有TTL的限制，则数据包将会在这个环上一直死转，由于有了TTL，最终TTL为0后，则将数据包丢弃。ping发送数据包里面有TTL，但是并非是必须的，即是没有TTL也是能正常工作的，traceroute正是因为有了TTL才能正常工作，ifconfig是用来配置网卡信息的，不需要TTL，netstat是用来显示路由表的，也是不需要TTL的。</p>
+<p><strong>13、路由表是做什么用的？在Linux环境中怎么配置一条默认路由？</strong></p>
+<p>路由表是用来决定如何将一个数据包从一个子网传送到另一个子网的，换句话说就是用来决定从一个网卡接收到的包应该送到哪一个网卡上去。路由表的每一行至少有目标网络号、子网掩码、到这个子网应该使用的网卡这三条信息。当路由器从一个网卡接收到一个包时，它扫描路由表的每一行，用里面的子网掩码与数据包中的目标IP地址做逻辑与运算（&amp;）找出目标网络号。如果得出的结果网络号与这一行的网络号相同，就将这条路由表六下来作为备用路由。如果已经有备用路由了，就载这两条路由里将网络号最长的留下来，另一条丢掉（这是用无分类编址CIDR的情况才是匹配网络号最长的，其他的情况是找到第一条匹配的行时就可以进行转发了）。如此接着扫描下一行直到结束。如果扫描结束仍没有找到任何路由，就用默认路由。确定路由后，直接将数据包送到对应的网卡上去。在具体的实现中，路由表可能包含更多的信息为选路由算法的细节所用。</p>
+<p>在Linux上可以用“route add default gw&lt;默认路由器 IP&gt;”命令配置一条默认路由。</p>
+<p><strong>14、RARP？</strong></p>
+<p>逆地址解析协议，作用是完成硬件地址到IP地址的映射，主要用于无盘工作站，因为给无盘工作站配置的IP地址不能保存。</p>
+<p><strong>15、运输层协议与网络层协议的区别？</strong></p>
+<p>网络层协议负责的是提供主机间的逻辑通信</p>
+<p>​    运输层协议负责的是提供进程间的逻辑通信</p>
+<p><strong>16、说说静态路由和动态路由有什么区别。</strong></p>
+<p>静态路由是由管理员手工配置的，适合比较简单的网络或需要做路由特殊控制。而动态路由则是由动态路由协议自动维护的，不需人工干预，适合比较复杂大型的网络。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">路由器能够自动地建立自己的路由表，并且能够根据实际实际情况的变化适时地进行调整。动态路由机制的运作依赖路由器的两个基本功能：对路由表的维护；路由器之间适时的路由信息交换。</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<p><strong>17、HTTP的长连接和短连接?</strong></p>
+<p>HTTP的长连接和短连接本质上是TCP长连接和短连接。HTTP属于应用层协议.</p>
+<p><strong>短连接</strong>:浏览器和服务器每进行一次HTTP操作，就建立一次连接，但任务结束就中断连接。</p>
+<p><strong>长连接</strong>:当一个网页打开完成后，客户端和服务器之间用于传输HTTP数据的 TCP连接不会关闭，如果客户端再次访问这个服务器上的网页，会继续使用这一条已经建立的连接。Keep-Alive不会永久保持连接，它有一个保持时间，可以在不同的服务器软件（如Apache）中设定这个时间。实现长连接要客户端和服务端都支持长连接。</p>
+<p><strong>TCP短连接:</strong> client向server发起连接请求，server接到请求，然后双方建立连接。client向server发送消息，server回应client，然后一次读写就完成了，这时候双方任何一个都可以发起close操作，不过一般都是client先发起 close操作.短连接一般只会在client/server间传递一次读写操作</p>
+<p> <strong>TCP长连接:</strong> client向server发起连接，server接受client连接，双方建立连接。Client与server完成一次读写之后，它们之间的连接并不会主动关闭，后续的读写操作会继续使用这个连接。</p>
+<p><strong>18、 IO中同步与异步，阻塞与非阻塞区别</strong></p>
+<p>同步和异步关注的是<strong>消息通信机制</strong> (synchronous communication/asynchronous communication)<br>所谓<strong>同步</strong>，就是在发出一个<em>调用</em>时，在没有得到结果之前，该<em>调用</em>就不返回。但是一旦调用返回，就得到返回值了。<br>换句话说，就是由<em>调用者</em>主动等待这个<em>调用</em>的结果。<br>而<strong>异步</strong>则是相反，*<strong>调用*在发出之后，这个调用就直接返回了，所以没有返回结果</strong>。换句话说，当一个异步过程调用发出后，调用者不会立刻得到结果。而是在<em>调用</em>发出后，<em>被调用者</em>通过状态、通知来通知调用者，或通过回调函数处理这个调用。</p>
+<p>阻塞和非阻塞关注的是<strong>程序在等待调用结果（消息，返回值）时的状态**</strong>.**</p>
+<p><strong>阻塞调用</strong>是指调用结果返回之前，当前线程会被挂起。函数只有在得到结果之后才会返回。</p>
+<p><strong>非阻塞：</strong>不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。</p>
+<p><strong>19、ip地址分段</strong></p>
+<p>A类网络的IP地址范围为1.0.0.1－127.255.255.254；<br>B类网络的IP地址范围为：128.1.0.1－191.255.255.254；<br>C类网络的IP地址范围为：192.0.1.1－223.255.255.254、</p>
+<p><strong>20、为什么TIME_WAIT状态还需要等2*MSL（</strong>Max SegmentLifetime，最大分段生存期<strong>）秒之后才能返回到**</strong>CLOSED状态呢？**</p>
+<p>因为虽然双方都同意关闭连接了，而且握手的4个报文也都发送完毕，按理可以直接回到CLOSED状态（就好比从SYN_SENT状态到ESTABLISH状态那样），但是我们必须假想网络是不可靠的，你无法保证你最后发送的ACK报文一定会被对方收到，就是说对方处于LAST_ACK状态下的SOCKET可能会因为超时未收到ACK报文，而重发FIN报文，所以这个TIME_WAIT状态的作用就是用来重发可能丢失的ACK报文。</p>
+<h3 id="21-从输入网址到浏览器显示页面的过程"><a href="#21-从输入网址到浏览器显示页面的过程" class="headerlink" title="21.从输入网址到浏览器显示页面的过程"></a>21.从输入网址到浏览器显示页面的过程</h3><p>1.DNS域名解析系统对输入的网址进行解析：DNS域名解析系统是一个数据服务器，里面存储了域名和IP之间的对应关系，从而得到IP地址，通过这个IP地址，才能访问一台服务器。</p>
+<p>2.建立TCP连接：客户端浏览器与服务器建立TCP安全连接（三次握手）,为之后的HTTP相应做准备</p>
+<p>3.客户端（浏览器）发送HTTP请求，服务器响应请求：服务器接收到请求，然后进行处理，整合需要的资源，通过HTTP协议传输响应发送给客服端浏览器</p>
+<p>4.浏览器解析渲染页面</p>
+<h3 id="22-HTTP与HTTPS的主要区别"><a href="#22-HTTP与HTTPS的主要区别" class="headerlink" title="22.HTTP与HTTPS的主要区别"></a>22.HTTP与HTTPS的主要区别</h3><p>1.https协议需要到CA申请证书，一般免费证书较少，因而需要一定费用。</p>
+<p>2.http是超文本传输协议，信息是明文传输，https则是具有安全性的SSL/TLS加密传输协议。</p>
+<p>3.http和https使用的是不同的连接方式，用的端口也不一样，前者是80，后者是443</p>
+<h2 id="4-http的连接很简单，是无状态的，HTTPS协议是由SSL-TLS-HTTP协议构成的可进行加密传输，比HTTP协议安全"><a href="#4-http的连接很简单，是无状态的，HTTPS协议是由SSL-TLS-HTTP协议构成的可进行加密传输，比HTTP协议安全" class="headerlink" title="4.http的连接很简单，是无状态的，HTTPS协议是由SSL/TLS+HTTP协议构成的可进行加密传输，比HTTP协议安全"></a>4.http的连接很简单，是无状态的，HTTPS协议是由SSL/TLS+HTTP协议构成的可进行加密传输，比HTTP协议安全</h2>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/03/02/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-SSM整合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -759,138 +1127,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/01/18/%E5%89%91%E6%8C%87Offer-%E5%8C%85%E5%90%ABmin%E5%87%BD%E6%95%B0%E7%9A%84%E6%A0%88/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-剑指Offer-按之字形顺序打印二叉树" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/17/%E5%89%91%E6%8C%87Offer-%E6%8C%89%E4%B9%8B%E5%AD%97%E5%BD%A2%E9%A1%BA%E5%BA%8F%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/">剑指Offer-按之字形顺序打印二叉树</a>
-    </h1>
-  
-
-        
-        <a href="/2021/01/17/%E5%89%91%E6%8C%87Offer-%E6%8C%89%E4%B9%8B%E5%AD%97%E5%BD%A2%E9%A1%BA%E5%BA%8F%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/" class="archive-article-date">
-  	<time datetime="2021-01-17T12:28:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h2><p>请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。  </p>
-<h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h2><p>在二叉树的层级遍历中加入标志，如果从左向右，则直接将当前节点值加入list中，如果从右向左，则将当前值在0位置加入list中  </p>
-<h2 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">public class TreeNode &#123;</span></span><br><span class="line"><span class="comment">    int val = 0;</span></span><br><span class="line"><span class="comment">    TreeNode left = null;</span></span><br><span class="line"><span class="comment">    TreeNode right = null;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    public TreeNode(int val) &#123;</span></span><br><span class="line"><span class="comment">        this.val = val;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> ArrayList&lt;ArrayList&lt;Integer&gt; &gt; Print(TreeNode pRoot) &#123;</span><br><span class="line">        <span class="keyword">if</span>(pRoot==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        ArrayList&lt;ArrayList&lt;Integer&gt;&gt; res=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        Queue&lt;TreeNode&gt; queue=<span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        queue.add(pRoot);</span><br><span class="line">        <span class="comment">//标志位，记录是从左向右还是从右向左</span></span><br><span class="line">        <span class="keyword">boolean</span> flag=<span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">while</span>(!queue.isEmpty())&#123;</span><br><span class="line">            <span class="keyword">int</span> count=queue.size();</span><br><span class="line">            ArrayList&lt;Integer&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;count;i++)&#123;</span><br><span class="line">                TreeNode node=queue.poll();</span><br><span class="line">                <span class="comment">//如果从左向右</span></span><br><span class="line">                <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">                    list.add(node.val);</span><br><span class="line">                 <span class="comment">//从右向左</span></span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    list.add(<span class="number">0</span>,node.val);</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(node.left!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                    queue.add(node.left);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(node.right!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                    queue.add(node.right);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            flag=!flag;</span><br><span class="line">            res.add(list);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/17/%E5%89%91%E6%8C%87Offer-%E6%8C%89%E4%B9%8B%E5%AD%97%E5%BD%A2%E9%A1%BA%E5%BA%8F%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-剑指Offer-栈的压入、弹出序列" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/17/%E5%89%91%E6%8C%87Offer-%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5%E3%80%81%E5%BC%B9%E5%87%BA%E5%BA%8F%E5%88%97/">剑指Offer-栈的压入、弹出序列</a>
-    </h1>
-  
-
-        
-        <a href="/2021/01/17/%E5%89%91%E6%8C%87Offer-%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5%E3%80%81%E5%BC%B9%E5%87%BA%E5%BA%8F%E5%88%97/" class="archive-article-date">
-  	<time datetime="2021-01-17T11:58:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h2><p>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）  </p>
-<h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h2><p>既然第一个序列表示栈的压入顺序，不妨让第一个序列的元素依次入栈，然后判断当前压入的值是否与popA[0]相等，如果相等，则出栈，且让栈顶元素与popA[1]比较，最后判断pushA[]是否为空  </p>
-<h2 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">IsPopOrder</span><span class="params">(<span class="keyword">int</span> [] pushA,<span class="keyword">int</span> [] popA)</span> </span>&#123;</span><br><span class="line">          Stack&lt;Integer&gt; stack=<span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> index=<span class="number">0</span>;</span><br><span class="line">         <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;pushA.length;i++)&#123;</span><br><span class="line">             stack.push(pushA[i]);</span><br><span class="line">             <span class="keyword">while</span>(!stack.isEmpty() &amp;&amp; stack.peek()==popA[index])&#123;</span><br><span class="line">                 stack.pop();</span><br><span class="line">                 index++;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">        <span class="keyword">return</span> stack.isEmpty();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/17/%E5%89%91%E6%8C%87Offer-%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5%E3%80%81%E5%BC%B9%E5%87%BA%E5%BA%8F%E5%88%97/">展开全文 >></a>
         </p>
       
 
