@@ -15,13 +15,13 @@
 <meta property="og:site_name" content="Jia">
 <meta property="og:description" content="1.Swagger简介 号称世界上最流行的Api框架 RestFul Api文档在线自动生成工具&#x3D;》Api文档与API定义同步更新 直接运行，可以在线测试API接口 支持多种语言（Java php）  2.在项目中使用Swagger需要的两个包 springfox-swagger2 springfox-swagger-ui  3.springboot集成Swagger 新建一个springboot">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:/Users/jxx/AppData/Roaming/Typora/typora-user-images/image-20210420110456848.png">
-<meta property="og:image" content="c:/Users/jxx/AppData/Roaming/Typora/typora-user-images/image-20210420111103488.png">
+<meta property="og:image" content="http://example.com/images/image-20210420110456848.png">
+<meta property="og:image" content="http://example.com/images/image-20210420111103488.png">
 <meta property="article:published_time" content="2021-04-20T01:34:58.000Z">
-<meta property="article:modified_time" content="2021-04-20T03:23:13.646Z">
+<meta property="article:modified_time" content="2021-04-20T03:24:51.001Z">
 <meta property="article:author" content="Jiaxiangxiang">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:/Users/jxx/AppData/Roaming/Typora/typora-user-images/image-20210420110456848.png">
+<meta name="twitter:image" content="http://example.com/images/image-20210420110456848.png">
   
     <link rel="alternative" href="/atom.xml" title="Jia" type="application/atom+xml">
   
@@ -201,10 +201,10 @@
 <h3 id="8-配置API文档的分组"><a href="#8-配置API文档的分组" class="headerlink" title="8.配置API文档的分组"></a>8.配置API文档的分组</h3></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.groupName(&quot;jxx&quot;)</span><br></pre></td></tr></table></figure>
-<p><img src="C:\Users\jxx\AppData\Roaming\Typora\typora-user-images\image-20210420110456848.png" alt="image-20210420110456848"></p>
+<p><img src="/images/image-20210420110456848.png" alt="image-20210420110456848"></p>
 <p>如何配置多个分组</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Docket <span class="title">docket1</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Docket <span class="title">docket2</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Docket <span class="title">docket3</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;C&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="C:\Users\jxx\AppData\Roaming\Typora\typora-user-images\image-20210420111103488.png" alt="image-20210420111103488"></p>
+<p><img src="/images/image-20210420111103488.png" alt="image-20210420111103488"></p>
 
       
 
