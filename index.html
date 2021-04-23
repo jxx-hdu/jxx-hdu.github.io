@@ -143,6 +143,228 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-分发糖果" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/23/%E5%88%86%E5%8F%91%E7%B3%96%E6%9E%9C/">分发糖果</a>
+    </h1>
+  
+
+        
+        <a href="/2021/04/23/%E5%88%86%E5%8F%91%E7%B3%96%E6%9E%9C/" class="archive-article-date">
+  	<time datetime="2021-04-23T07:45:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>老师想给孩子们分发糖果，有 N 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。</p>
+<p>你需要按照以下要求，帮助老师给这些孩子分发糖果：</p>
+<p>每个孩子至少分配到 1 个糖果。<br>评分更高的孩子必须比他两侧的邻位孩子获得更多的糖果。<br>那么这样下来，老师至少需要准备多少颗糖果呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：[1,0,2]</span><br><span class="line">输出：5</span><br><span class="line">解释：你可以分别给这三个孩子分发 2、1、2 颗糖果。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入：[1,2,2]</span><br><span class="line">输出：4</span><br><span class="line">解释：你可以分别给这三个孩子分发 1、2、1 颗糖果。</span><br><span class="line">     第三个孩子只得到 1 颗糖果，这已满足上述两个条件。</span><br></pre></td></tr></table></figure>
+<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><ul>
+<li>对于条件1，新建一个全1数组</li>
+<li>对于条件2，首先确定一侧，再确定另一侧，比如先确定右边评分大于左边评分的情况。如果ratings[i]&gt;ratings[i-1],那么[i]的糖一定要比[i-1]的多，因此：nums[i]=nums[i-1]+1;</li>
+<li>再确定左边大于右边的情况（从后向前遍历），如果ratings[i]&gt;ratings[i+1] 则选择nums[i]与nums[i+1]中最大的那个，这样才能保证评分更高的孩子必须比他两侧的邻位孩子获得更多的糖果</li>
+</ul>
+<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">candy</span><span class="params">(<span class="keyword">int</span>[] ratings)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] nums=<span class="keyword">new</span> <span class="keyword">int</span>[ratings.length];</span><br><span class="line">        <span class="comment">//满足条件1</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">            nums[i]=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//条件2.既然评分更高的孩子必须比他两侧的邻位孩子获得更多的糖果</span></span><br><span class="line">        <span class="comment">//因此，先从前向后，满足右边大于左边</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;ratings.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(ratings[i]&gt;ratings[i-<span class="number">1</span>])&#123;</span><br><span class="line">                nums[i]=nums[i-<span class="number">1</span>]+<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//再判断左边大于右边，从后向前</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=ratings.length-<span class="number">2</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            <span class="keyword">if</span>(ratings[i]&gt;ratings[i+<span class="number">1</span>])&#123;</span><br><span class="line">                nums[i]=Math.max(nums[i],nums[i+<span class="number">1</span>]+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">            res+=nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/04/23/%E5%88%86%E5%8F%91%E7%B3%96%E6%9E%9C/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-贪心-K次取反后最大化的数组和" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/23/%E8%B4%AA%E5%BF%83-K%E6%AC%A1%E5%8F%96%E5%8F%8D%E5%90%8E%E6%9C%80%E5%A4%A7%E5%8C%96%E7%9A%84%E6%95%B0%E7%BB%84%E5%92%8C/">贪心-K次取反后最大化的数组和</a>
+    </h1>
+  
+
+        
+        <a href="/2021/04/23/%E8%B4%AA%E5%BF%83-K%E6%AC%A1%E5%8F%96%E5%8F%8D%E5%90%8E%E6%9C%80%E5%A4%A7%E5%8C%96%E7%9A%84%E6%95%B0%E7%BB%84%E5%92%8C/" class="archive-article-date">
+  	<time datetime="2021-04-23T06:14:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定一个整数数组 A，我们只能用以下方法修改该数组：我们选择某个索引 i 并将 A[i] 替换为 -A[i]，然后总共重复这个过程 K 次。（我们可以多次选择同一个索引 i。）</p>
+<p>以这种方式修改数组后，返回数组可能的最大和。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：A &#x3D; [4,2,3], K &#x3D; 1</span><br><span class="line">输出：5</span><br><span class="line">解释：选择索引 (1,) ，然后 A 变为 [4,-2,3]。</span><br></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：A &#x3D; [3,-1,0,2], K &#x3D; 3</span><br><span class="line">输出：6</span><br><span class="line">解释：选择索引 (1, 2, 2) ，然后 A 变为 [3,1,0,2]。</span><br></pre></td></tr></table></figure>
+<p>示例 3：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：A &#x3D; [2,-3,-1,5,-4], K &#x3D; 2</span><br><span class="line">输出：13</span><br><span class="line">解释：选择索引 (1, 4) ，然后 A 变为 [2,3,-1,5,4]。</span><br></pre></td></tr></table></figure>
+<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><ul>
+<li>首先将数组按照绝对值大小从大到小排序；</li>
+<li>从前向后遍历数组A，如果数组元素小于0，则将其变为正数，同时K–</li>
+<li>然后在对数组进行一次排序，如果第一个元素大于0，说明将全部负数变为正数后，K仍然大于0，这时候就要把最小的正数变为相反数，不断循环，直到K==0</li>
+<li>最后对数组求和</li>
+</ul>
+<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">largestSumAfterKNegations</span><span class="params">(<span class="keyword">int</span>[] A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//首先对数组进行排序</span></span><br><span class="line">        Arrays.sort(A);</span><br><span class="line">        <span class="comment">//将负数先变为正数，同时K--</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.length-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i]&lt;<span class="number">0</span> &amp;&amp; K&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                A[i]=-A[i];  </span><br><span class="line">                K--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果K==0或者负数已经全部变为正数后，K仍然大于0</span></span><br><span class="line">        <span class="comment">//在对A 进行一次排序</span></span><br><span class="line">        Arrays.sort(A);</span><br><span class="line">        <span class="comment">//如果第一个元素为大于0，说明是负数已经变为正数后，K仍然大于0，这时候只要把最小的正数变为负数，不断循环，直到K==0</span></span><br><span class="line">        <span class="keyword">if</span>(A[<span class="number">0</span>]&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">while</span>(K&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                A[<span class="number">0</span>]=-A[<span class="number">0</span>];</span><br><span class="line">                K--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;<span class="comment">//说明K已经为0，不需要再变</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//求和</span></span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.length;i++)&#123;</span><br><span class="line">            sum+=A[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/04/23/%E8%B4%AA%E5%BF%83-K%E6%AC%A1%E5%8F%96%E5%8F%8D%E5%90%8E%E6%9C%80%E5%A4%A7%E5%8C%96%E7%9A%84%E6%95%B0%E7%BB%84%E5%92%8C/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-名企编程真题-安置路灯" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/21/%E5%90%8D%E4%BC%81%E7%BC%96%E7%A8%8B%E7%9C%9F%E9%A2%98-%E5%AE%89%E7%BD%AE%E8%B7%AF%E7%81%AF/">名企编程真题-&gt;安置路灯</a>
+    </h1>
+  
+
+        
+        <a href="/2021/04/21/%E5%90%8D%E4%BC%81%E7%BC%96%E7%A8%8B%E7%9C%9F%E9%A2%98-%E5%AE%89%E7%BD%AE%E8%B7%AF%E7%81%AF/" class="archive-article-date">
+  	<time datetime="2021-04-21T07:52:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>小Q正在给一条长度为n的道路设计路灯安置方案。</p>
+<p>为了让问题更简单,小Q把道路视为n个方格,需要照亮的地方用’.’表示, 不需要照亮的障碍物格子用’X’表示。</p>
+<p>小Q现在要在道路上设置一些路灯, 对于安置在pos位置的路灯, 这盏路灯可以照亮pos - 1, pos, pos + 1这三个位置。</p>
+<p>小Q希望能安置尽量少的路灯照亮所有’.’区域, 希望你能帮他计算一下最少需要多少盏路灯。</p>
+<h5 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述:"></a>输入描述:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入的第一行包含一个正整数t(1 &lt;&#x3D; t &lt;&#x3D; 1000), 表示测试用例数</span><br><span class="line">接下来每两行一个测试数据, 第一行一个正整数n(1 &lt;&#x3D; n &lt;&#x3D; 1000),表示道路的长度。</span><br><span class="line">第二行一个字符串s表示道路的构造,只包含&#39;.&#39;和&#39;X&#39;。</span><br></pre></td></tr></table></figure>
+<h5 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述:"></a>输出描述:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对于每个测试用例, 输出一个正整数表示最少需要多少盏路灯。</span><br></pre></td></tr></table></figure>
+<h5 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">.X.</span><br><span class="line">11</span><br><span class="line">...XX....XX</span><br></pre></td></tr></table></figure>
+<h5 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>遍历路灯字符串，碰到“.”，结果就加1，然后向后挪3个位置，如果遇到“X”，就向后挪1个位置。</p>
+<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        BufferedReader br=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">        <span class="keyword">int</span> t=Integer.parseInt(br.readLine());</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;t;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> res=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> n=Integer.parseInt(br.readLine());</span><br><span class="line">            String s=br.readLine();</span><br><span class="line">            <span class="keyword">int</span> j=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(j&lt;s.length())</span><br><span class="line">                <span class="keyword">if</span>(s.charAt(j)==<span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                    res+=<span class="number">1</span>;</span><br><span class="line">                    j+=<span class="number">3</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    j+=<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">             System.out.println(res);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/04/21/%E5%90%8D%E4%BC%81%E7%BC%96%E7%A8%8B%E7%9C%9F%E9%A2%98-%E5%AE%89%E7%BD%AE%E8%B7%AF%E7%81%AF/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-回溯-组合总和3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -761,227 +983,9 @@
 
 
   
-    <article id="post-哈希-四数相加（2）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/">哈希-四数相加（2）</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2021-04-19T13:57:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定四个包含整数的数组列表 A , B , C , D ,计算有多少个元组 (i, j, k, l) ，使得 A[i] + B[j] + C[k] + D[l] = 0。</p>
-<p>为了使问题简单化，所有的 A, B, C, D 具有相同的长度 N，且 0 ≤ N ≤ 500 。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">输入:</span><br><span class="line">A &#x3D; [ 1, 2]</span><br><span class="line">B &#x3D; [-2,-1]</span><br><span class="line">C &#x3D; [-1, 2]</span><br><span class="line">D &#x3D; [ 0, 2]</span><br><span class="line"></span><br><span class="line">输出:</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">解释:</span><br><span class="line">两个元组如下:</span><br><span class="line">1. (0, 0, 0, 1) -&gt; A[0] + B[0] + C[0] + D[1] &#x3D; 1 + (-2) + (-1) + 2 &#x3D; 0</span><br><span class="line">2. (1, 1, 0, 0) -&gt; A[1] + B[1] + C[0] + D[0] &#x3D; 2 + (-1) + (-1) + 0 &#x3D; 0</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>本题采用分组+哈希表的方式进行求解</p>
-<p>首先将四个数组分成AB,CD两部分</p>
-<p>对于AB，我们采用二层循环对他们进行遍历，得到的A[i]+B[j]的值作为哈希的key，(i,j)出现的次数作为value，存入map中，</p>
-<p>对于CD，同样采用二层循环遍历，当出现-（C[m]+d[n]）出现在map中，则count加上对应的value</p>
-<p>最后返回count</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fourSumCount</span><span class="params">(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2, <span class="keyword">int</span>[] nums3, <span class="keyword">int</span>[] nums4)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//四个数相加等价为两个数相加</span></span><br><span class="line">        HashMap&lt;Integer,Integer&gt; mapAB=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i:nums1)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j:nums2)&#123;</span><br><span class="line">                mapAB.put(i+j,mapAB.getOrDefault(i+j,<span class="number">0</span>)+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果在CD中找到两个数之和的相反数在map中，则count++</span></span><br><span class="line">        <span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> m:nums3)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> n:nums4)&#123;</span><br><span class="line">                <span class="keyword">if</span>(mapAB.containsKey(-m-n))&#123;</span><br><span class="line">                    count+=mapAB.get(-m-n);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-优先级队列" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/">优先级队列</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/" class="archive-article-date">
-  	<time datetime="2021-04-19T02:41:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-应用背景"><a href="#1-应用背景" class="headerlink" title="1.应用背景"></a>1.应用背景</h3><p><strong>使用场景：当先按照一个变量进行排序，然后当该变量相同时，按照另外一个变量进行排序。</strong></p>
-<p>例如:牛牛是一家广告公司的员工，一天的工作很固定，就是将k条新的广告，按照注册用户所设定的时间顺序发放到用户的邮箱。假设某用户设定的时间为t，那么，这位用户接收第一封广告的时间为t，接收第二封广告的时间为2<em>t,接收第三封广告的时刻为3</em>t…..依次类推。</p>
-<h4 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h4><p>第一行输入两个正整数n,k,依次代表用户数量，以及今天需要发送的广告数量。第2行到第n+1行，每行一个正整数t,其中第i+1行输入的正整数，代表编号为i的用户，所设定的时间t</p>
-<h4 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h4><p>输出一共k行，按照发放广告的时间顺序，依次输出用户的编号，如果某一时间，有多个用户可以接收广告，则优先给用户编号小的发放。</p>
-<p>输入用例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">3 3</span><br><span class="line">3</span><br><span class="line">6</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
-<p>输出用例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">1</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>经过分析可得，本题先按照时间进行排序，然后在根据编号进行排序，所以采用优先队列进行处理。</p>
-<p>首先定义一个类，该类中具有两个属性，分别为时间time和编号id</p>
-<p>然后自定义比较规则</p>
-<p>最后输出前k个元素对应的id</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kuang.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sun.awt.datatransfer.DataTransferer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@autuor</span> jxx</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-04-18-20:20</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//自定义一个类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> time,<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.time=time;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> time;</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="comment">//自定义比较类，先比较num，num按升序排列，若num相等在比较id,id升序</span></span><br><span class="line">    <span class="keyword">static</span> Comparator&lt;Node&gt; Node=<span class="keyword">new</span> Comparator&lt;Node&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Node o1,Node o2)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(o1.time!=o2.time)&#123;</span><br><span class="line">                <span class="keyword">return</span> o1.time-o2.time;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> o1.id-o2.id;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        BufferedReader br=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">        String[] str=br.readLine().split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        <span class="keyword">int</span> n=Integer.parseInt(str[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">int</span> count=Integer.parseInt(str[<span class="number">1</span>]);</span><br><span class="line">        Queue&lt;Node&gt; q=<span class="keyword">new</span> PriorityQueue&lt;&gt;(Node);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> a=Integer.parseInt(br.readLine());</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=count;j++)&#123;</span><br><span class="line">                q.add(<span class="keyword">new</span> Node(a*j,i));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;count;i++)&#123;</span><br><span class="line">            System.out.println(q.poll().id);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-自定义排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">自定义排序</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-  	<time datetime="2021-04-19T01:10:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-二维数组的自定义排序"><a href="#1-二维数组的自定义排序" class="headerlink" title="1.二维数组的自定义排序"></a>1.二维数组的自定义排序</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[][] num=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>][<span class="number">10</span>];</span><br><span class="line"><span class="comment">//对数组num按照第1列进行升序排序</span></span><br><span class="line">Arrays.sort(num,(o1,o2)-&gt;<span class="number">01</span>[<span class="number">0</span>]-o2[<span class="number">0</span>]);</span><br><span class="line"><span class="comment">//对数组num按照第2列进行升序排序</span></span><br><span class="line">Arrays.sort(num,(o1,o2)-&gt;o1[<span class="number">1</span>]-o2[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//对数组num按照第1列进行降序排序</span></span><br><span class="line">Arrays.sort(num,(o1,o2)-&gt;<span class="number">02</span>[<span class="number">0</span>]-o1[<span class="number">0</span>]);</span><br><span class="line"><span class="comment">//对数组num按照第2列进行降序排序</span></span><br><span class="line">Arrays.sort(num,(o1,o2)-&gt;o2[<span class="number">1</span>]-o1[<span class="number">1</span>]);</span><br></pre></td></tr></table></figure>
-<h3 id="2-Map集合的自定义排序"><a href="#2-Map集合的自定义排序" class="headerlink" title="2.Map集合的自定义排序"></a>2.Map集合的自定义排序</h3><p>如果需要根据key进行排序，则直接利用TreeMap;</p>
-<p>如果需要根据value进行排序，则方法如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"> List&lt;Map.Entry&lt;Integer,Integer&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;(map.entrySet()); <span class="comment">//将map的entryset放入list集合</span></span><br><span class="line">        <span class="comment">//对list进行排序，并通过Comparator传入自定义的排序规则</span></span><br><span class="line">        Collections.sort(list,<span class="keyword">new</span> Comparator&lt;Map.Entry&lt;Integer, Integer&gt;&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Map.Entry&lt;Integer, Integer&gt; o1, Map.Entry&lt;Integer, Integer&gt; o2)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> o1.getValue()-o2.getValue(); <span class="comment">//重写排序规则,对value进行排序</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">		<span class="comment">//可以将key和value放入二维数组中</span></span><br><span class="line">        <span class="keyword">int</span>[][] keynum=<span class="keyword">new</span> <span class="keyword">int</span>[list.size()][<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">int</span> k=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> l=<span class="number">0</span>;</span><br><span class="line">        <span class="comment">//用迭代器对list中的键值对元素进行遍历</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; list.size(); i++) &#123;</span><br><span class="line"><span class="comment">//            System.out.println(list.get(i).getKey() + &quot;: &quot; + list.get(i).getValue());</span></span><br><span class="line">             keynum[k++][<span class="number">1</span>]=list.get(i).getValue();</span><br><span class="line">             keynum[l++][<span class="number">0</span>]=list.get(i).getKey();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="3-map集合的遍历"><a href="#3-map集合的遍历" class="headerlink" title="3.map集合的遍历"></a>3.map集合的遍历</h3><p>map集合的遍历方法一：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;Integer&gt; keyset=map.keySet();</span><br><span class="line">    <span class="keyword">for</span>(Integer key:keyset)&#123;</span><br><span class="line">        Integer value=map.get(key);</span><br><span class="line">        System.out.println(key+<span class="string">&quot; &quot;</span>+value);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>也可以对键和值单独遍历</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">        <span class="keyword">for</span>(Integer key:map.keySet())&#123;</span><br><span class="line">            System.out.print(key+<span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(Integer value:map.values())&#123;</span><br><span class="line">            System.out.print(value+<span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//如果想把遍历的值放入数组中，则代码如下：</span></span><br><span class="line">		<span class="keyword">int</span>[] keynum=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">int</span> k=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(Integer key:map.keySet())&#123;</span><br><span class="line">            keynum[k++]=key;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 

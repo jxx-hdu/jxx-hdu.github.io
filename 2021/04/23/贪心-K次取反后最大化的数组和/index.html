@@ -6,15 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives | Jia</title>
+  <title>贪心-K次取反后最大化的数组和 | Jia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人技术博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Jia">
-<meta property="og:url" content="http://example.com/archives/page/2/index.html">
+  <meta name="description" content="1.问题描述给定一个整数数组 A，我们只能用以下方法修改该数组：我们选择某个索引 i 并将 A[i] 替换为 -A[i]，然后总共重复这个过程 K 次。（我们可以多次选择同一个索引 i。） 以这种方式修改数组后，返回数组可能的最大和。 示例 1： 123输入：A &#x3D; [4,2,3], K &#x3D; 1输出：5解释：选择索引 (1,) ，然后 A 变为 [4,-2,3]。 示例 2：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="贪心-K次取反后最大化的数组和">
+<meta property="og:url" content="http://example.com/2021/04/23/%E8%B4%AA%E5%BF%83-K%E6%AC%A1%E5%8F%96%E5%8F%8D%E5%90%8E%E6%9C%80%E5%A4%A7%E5%8C%96%E7%9A%84%E6%95%B0%E7%BB%84%E5%92%8C/index.html">
 <meta property="og:site_name" content="Jia">
-<meta property="og:description" content="个人技术博客">
+<meta property="og:description" content="1.问题描述给定一个整数数组 A，我们只能用以下方法修改该数组：我们选择某个索引 i 并将 A[i] 替换为 -A[i]，然后总共重复这个过程 K 次。（我们可以多次选择同一个索引 i。） 以这种方式修改数组后，返回数组可能的最大和。 示例 1： 123输入：A &#x3D; [4,2,3], K &#x3D; 1输出：5解释：选择索引 (1,) ，然后 A 变为 [4,-2,3]。 示例 2：">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-23T06:14:20.000Z">
+<meta property="article:modified_time" content="2021-04-23T06:20:25.105Z">
 <meta property="article:author" content="Jiaxiangxiang">
 <meta name="twitter:card" content="summary">
   
@@ -141,295 +143,183 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-贪心-K次取反后最大化的数组和" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      贪心-K次取反后最大化的数组和
+    </h1>
+  
+
+        
+        <a href="/2021/04/23/%E8%B4%AA%E5%BF%83-K%E6%AC%A1%E5%8F%96%E5%8F%8D%E5%90%8E%E6%9C%80%E5%A4%A7%E5%8C%96%E7%9A%84%E6%95%B0%E7%BB%84%E5%92%8C/" class="archive-article-date">
+  	<time datetime="2021-04-23T06:14:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-23</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定一个整数数组 A，我们只能用以下方法修改该数组：我们选择某个索引 i 并将 A[i] 替换为 -A[i]，然后总共重复这个过程 K 次。（我们可以多次选择同一个索引 i。）</p>
+<p>以这种方式修改数组后，返回数组可能的最大和。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：A &#x3D; [4,2,3], K &#x3D; 1</span><br><span class="line">输出：5</span><br><span class="line">解释：选择索引 (1,) ，然后 A 变为 [4,-2,3]。</span><br></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：A &#x3D; [3,-1,0,2], K &#x3D; 3</span><br><span class="line">输出：6</span><br><span class="line">解释：选择索引 (1, 2, 2) ，然后 A 变为 [3,1,0,2]。</span><br></pre></td></tr></table></figure>
+<p>示例 3：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：A &#x3D; [2,-3,-1,5,-4], K &#x3D; 2</span><br><span class="line">输出：13</span><br><span class="line">解释：选择索引 (1, 4) ，然后 A 变为 [2,3,-1,5,4]。</span><br></pre></td></tr></table></figure>
+<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><ul>
+<li>首先将数组按照绝对值大小从大到小排序；</li>
+<li>从前向后遍历数组A，如果数组元素小于0，则将其变为正数，同时K–</li>
+<li>然后在对数组进行一次排序，如果第一个元素大于0，说明将全部负数变为正数后，K仍然大于0，这时候就要把最小的正数变为相反数，不断循环，直到K==0</li>
+<li>最后对数组求和</li>
+</ul>
+<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">largestSumAfterKNegations</span><span class="params">(<span class="keyword">int</span>[] A, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//首先对数组进行排序</span></span><br><span class="line">        Arrays.sort(A);</span><br><span class="line">        <span class="comment">//将负数先变为正数，同时K--</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.length-<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(A[i]&lt;<span class="number">0</span> &amp;&amp; K&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                A[i]=-A[i];  </span><br><span class="line">                K--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果K==0或者负数已经全部变为正数后，K仍然大于0</span></span><br><span class="line">        <span class="comment">//在对A 进行一次排序</span></span><br><span class="line">        Arrays.sort(A);</span><br><span class="line">        <span class="comment">//如果第一个元素为大于0，说明是负数已经变为正数后，K仍然大于0，这时候只要把最小的正数变为负数，不断循环，直到K==0</span></span><br><span class="line">        <span class="keyword">if</span>(A[<span class="number">0</span>]&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">while</span>(K&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                A[<span class="number">0</span>]=-A[<span class="number">0</span>];</span><br><span class="line">                K--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;<span class="comment">//说明K已经为0，不需要再变</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//求和</span></span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.length;i++)&#123;</span><br><span class="line">            sum+=A[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2021-04-19T13:57:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/">哈希-四数相加（2）</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/04/23/%E8%B4%AA%E5%BF%83-K%E6%AC%A1%E5%8F%96%E5%8F%8D%E5%90%8E%E6%9C%80%E5%A4%A7%E5%8C%96%E7%9A%84%E6%95%B0%E7%BB%84%E5%92%8C/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/" class="archive-article-date">
-  	<time datetime="2021-04-19T02:41:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2021/04/23/%E5%88%86%E5%8F%91%E7%B3%96%E6%9E%9C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          分发糖果
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/21/%E5%90%8D%E4%BC%81%E7%BC%96%E7%A8%8B%E7%9C%9F%E9%A2%98-%E5%AE%89%E7%BD%AE%E8%B7%AF%E7%81%AF/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">名企编程真题-&gt;安置路灯</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/">优先级队列</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-  	<time datetime="2021-04-19T01:10:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">自定义排序</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2021-04-18T11:38:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/">哈希-快乐数</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/18/%E5%A5%96%E5%AD%A6%E9%87%91/" class="archive-article-date">
-  	<time datetime="2021-04-18T10:36:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/18/%E5%A5%96%E5%AD%A6%E9%87%91/">奖学金</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/" class="archive-article-date">
-  	<time datetime="2021-04-17T12:55:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/">JVM总结</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/" class="archive-article-date">
-  	<time datetime="2021-04-17T12:47:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/">哈希-两个数组的交集</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/%E5%93%88%E5%B8%8C-%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/" class="archive-article-date">
-  	<time datetime="2021-04-17T11:40:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/">哈希-有效的字母异位词</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/%E9%93%BE%E8%A1%A8-%E5%88%A4%E6%96%AD%E9%93%BE%E8%A1%A8%E6%98%AF%E5%90%A6%E6%9C%89%E7%8E%AF%E5%8F%8A%E5%85%A5%E7%8E%AF%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9/" class="archive-article-date">
-  	<time datetime="2021-04-17T11:06:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/%E9%93%BE%E8%A1%A8-%E5%88%A4%E6%96%AD%E9%93%BE%E8%A1%A8%E6%98%AF%E5%90%A6%E6%9C%89%E7%8E%AF%E5%8F%8A%E5%85%A5%E7%8E%AF%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9/">链表-判断链表是否有环及入环的第一个节点</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/%E9%93%BE%E8%A1%A8-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/" class="archive-article-date">
-  	<time datetime="2021-04-17T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/%E9%93%BE%E8%A1%A8-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/">链表-删除链表的倒数第N个节点</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/6/">6</a><a class="extend next" rel="next" href="/archives/page/3/">Next &amp;raquo;</a>
-    </nav>
   
 
 
@@ -453,8 +343,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

@@ -6,15 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives | Jia</title>
+  <title>名企编程真题-&gt;安置路灯 | Jia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人技术博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Jia">
-<meta property="og:url" content="http://example.com/archives/page/2/index.html">
+  <meta name="description" content="1.问题描述小Q正在给一条长度为n的道路设计路灯安置方案。 为了让问题更简单,小Q把道路视为n个方格,需要照亮的地方用’.’表示, 不需要照亮的障碍物格子用’X’表示。 小Q现在要在道路上设置一些路灯, 对于安置在pos位置的路灯, 这盏路灯可以照亮pos - 1, pos, pos + 1这三个位置。 小Q希望能安置尽量少的路灯照亮所有’.’区域, 希望你能帮他计算一下最少需要多少盏路灯。 输入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="名企编程真题-&gt;安置路灯">
+<meta property="og:url" content="http://example.com/2021/04/21/%E5%90%8D%E4%BC%81%E7%BC%96%E7%A8%8B%E7%9C%9F%E9%A2%98-%E5%AE%89%E7%BD%AE%E8%B7%AF%E7%81%AF/index.html">
 <meta property="og:site_name" content="Jia">
-<meta property="og:description" content="个人技术博客">
+<meta property="og:description" content="1.问题描述小Q正在给一条长度为n的道路设计路灯安置方案。 为了让问题更简单,小Q把道路视为n个方格,需要照亮的地方用’.’表示, 不需要照亮的障碍物格子用’X’表示。 小Q现在要在道路上设置一些路灯, 对于安置在pos位置的路灯, 这盏路灯可以照亮pos - 1, pos, pos + 1这三个位置。 小Q希望能安置尽量少的路灯照亮所有’.’区域, 希望你能帮他计算一下最少需要多少盏路灯。 输入">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-21T07:52:12.000Z">
+<meta property="article:modified_time" content="2021-04-21T07:56:43.615Z">
 <meta property="article:author" content="Jiaxiangxiang">
 <meta name="twitter:card" content="summary">
   
@@ -141,295 +143,178 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-名企编程真题-安置路灯" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      名企编程真题-&gt;安置路灯
+    </h1>
+  
+
+        
+        <a href="/2021/04/21/%E5%90%8D%E4%BC%81%E7%BC%96%E7%A8%8B%E7%9C%9F%E9%A2%98-%E5%AE%89%E7%BD%AE%E8%B7%AF%E7%81%AF/" class="archive-article-date">
+  	<time datetime="2021-04-21T07:52:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-21</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>小Q正在给一条长度为n的道路设计路灯安置方案。</p>
+<p>为了让问题更简单,小Q把道路视为n个方格,需要照亮的地方用’.’表示, 不需要照亮的障碍物格子用’X’表示。</p>
+<p>小Q现在要在道路上设置一些路灯, 对于安置在pos位置的路灯, 这盏路灯可以照亮pos - 1, pos, pos + 1这三个位置。</p>
+<p>小Q希望能安置尽量少的路灯照亮所有’.’区域, 希望你能帮他计算一下最少需要多少盏路灯。</p>
+<h5 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述:"></a>输入描述:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入的第一行包含一个正整数t(1 &lt;&#x3D; t &lt;&#x3D; 1000), 表示测试用例数</span><br><span class="line">接下来每两行一个测试数据, 第一行一个正整数n(1 &lt;&#x3D; n &lt;&#x3D; 1000),表示道路的长度。</span><br><span class="line">第二行一个字符串s表示道路的构造,只包含&#39;.&#39;和&#39;X&#39;。</span><br></pre></td></tr></table></figure>
+<h5 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述:"></a>输出描述:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对于每个测试用例, 输出一个正整数表示最少需要多少盏路灯。</span><br></pre></td></tr></table></figure>
+<h5 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">.X.</span><br><span class="line">11</span><br><span class="line">...XX....XX</span><br></pre></td></tr></table></figure>
+<h5 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>遍历路灯字符串，碰到“.”，结果就加1，然后向后挪3个位置，如果遇到“X”，就向后挪1个位置。</p>
+<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        BufferedReader br=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">        <span class="keyword">int</span> t=Integer.parseInt(br.readLine());</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;t;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> res=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> n=Integer.parseInt(br.readLine());</span><br><span class="line">            String s=br.readLine();</span><br><span class="line">            <span class="keyword">int</span> j=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(j&lt;s.length())</span><br><span class="line">                <span class="keyword">if</span>(s.charAt(j)==<span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                    res+=<span class="number">1</span>;</span><br><span class="line">                    j+=<span class="number">3</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    j+=<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">             System.out.println(res);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2021-04-19T13:57:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/">哈希-四数相加（2）</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/04/21/%E5%90%8D%E4%BC%81%E7%BC%96%E7%A8%8B%E7%9C%9F%E9%A2%98-%E5%AE%89%E7%BD%AE%E8%B7%AF%E7%81%AF/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/" class="archive-article-date">
-  	<time datetime="2021-04-19T02:41:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2021/04/23/%E8%B4%AA%E5%BF%83-K%E6%AC%A1%E5%8F%96%E5%8F%8D%E5%90%8E%E6%9C%80%E5%A4%A7%E5%8C%96%E7%9A%84%E6%95%B0%E7%BB%84%E5%92%8C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          贪心-K次取反后最大化的数组和
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/21/%E5%9B%9E%E6%BA%AF-%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8C3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">回溯-组合总和3</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/">优先级队列</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-  	<time datetime="2021-04-19T01:10:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">自定义排序</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2021-04-18T11:38:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/">哈希-快乐数</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/18/%E5%A5%96%E5%AD%A6%E9%87%91/" class="archive-article-date">
-  	<time datetime="2021-04-18T10:36:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/18/%E5%A5%96%E5%AD%A6%E9%87%91/">奖学金</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/" class="archive-article-date">
-  	<time datetime="2021-04-17T12:55:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/">JVM总结</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/" class="archive-article-date">
-  	<time datetime="2021-04-17T12:47:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/">哈希-两个数组的交集</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/%E5%93%88%E5%B8%8C-%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/" class="archive-article-date">
-  	<time datetime="2021-04-17T11:40:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/">哈希-有效的字母异位词</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/%E9%93%BE%E8%A1%A8-%E5%88%A4%E6%96%AD%E9%93%BE%E8%A1%A8%E6%98%AF%E5%90%A6%E6%9C%89%E7%8E%AF%E5%8F%8A%E5%85%A5%E7%8E%AF%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9/" class="archive-article-date">
-  	<time datetime="2021-04-17T11:06:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/%E9%93%BE%E8%A1%A8-%E5%88%A4%E6%96%AD%E9%93%BE%E8%A1%A8%E6%98%AF%E5%90%A6%E6%9C%89%E7%8E%AF%E5%8F%8A%E5%85%A5%E7%8E%AF%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9/">链表-判断链表是否有环及入环的第一个节点</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/04/17/%E9%93%BE%E8%A1%A8-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/" class="archive-article-date">
-  	<time datetime="2021-04-17T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/04/17/%E9%93%BE%E8%A1%A8-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B9/">链表-删除链表的倒数第N个节点</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/6/">6</a><a class="extend next" rel="next" href="/archives/page/3/">Next &amp;raquo;</a>
-    </nav>
   
 
 
@@ -453,8 +338,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
