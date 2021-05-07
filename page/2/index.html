@@ -143,6 +143,82 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-回溯法-四数之和" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/21/%E5%9B%9E%E6%BA%AF%E6%B3%95-%E5%9B%9B%E6%95%B0%E4%B9%8B%E5%92%8C/">回溯法-四数之和</a>
+    </h1>
+  
+
+        
+        <a href="/2021/04/21/%E5%9B%9E%E6%BA%AF%E6%B3%95-%E5%9B%9B%E6%95%B0%E4%B9%8B%E5%92%8C/" class="archive-article-date">
+  	<time datetime="2021-04-21T01:25:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定一个包含 n 个整数的数组 nums 和一个目标值 target，判断 nums 中是否存在四个元素 a，b，c 和 d ，使得 a + b + c + d 的值与 target 相等？找出所有满足条件且不重复的四元组。</p>
+<p>注意：答案中不可以包含重复的四元组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums &#x3D; [1,0,-1,0,-2,2], target &#x3D; 0</span><br><span class="line">输出：[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums &#x3D; [], target &#x3D; 0</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
+<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>本题相当于就一个数组中，使得总和为target的组合，其中组合中长度为4。因此可以采用回溯法进行求解，等价于4叉树。</p>
+<p>由于题目要求不可以包含重复的四元组，所以4叉树同一层中不能重复选择相同的元素，因此需要去重。同一组合中可以有相同元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(i&gt;index &amp;&amp; nums[i]==nums[i-<span class="number">1</span>])&#123;</span><br><span class="line">         <span class="keyword">continue</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>此外，该题数组中的元素可正可负，因此在处理过程中需要添加处理，以防止超时。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//不加下面这个判断运行超时，因为下面是target-nums[i] 如果target&lt;0 nums[i]&gt;=0,则最终target不可能减为0</span></span><br><span class="line">            <span class="keyword">if</span>(target&lt;<span class="number">0</span> &amp;&amp; nums[i]&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; fourSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.length&lt;<span class="number">4</span> || nums==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; res=<span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        List&lt;Integer&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        dfs(res,nums,list,<span class="number">0</span>,target);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(List&lt;List&lt;Integer&gt;&gt; res,<span class="keyword">int</span>[] nums,List&lt;Integer&gt; list,<span class="keyword">int</span> index,<span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(list.size()==<span class="number">4</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(target==<span class="number">0</span>)&#123;</span><br><span class="line">                res.add(<span class="keyword">new</span> ArrayList&lt;&gt;(list));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=index;i&lt;nums.length;i++)&#123;</span><br><span class="line">            <span class="comment">//去重</span></span><br><span class="line">            <span class="keyword">if</span>(i&gt;index &amp;&amp; nums[i]==nums[i-<span class="number">1</span>])&#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//不加下面这个判断运行超时，因为下面是target-nums[i] 如果target&lt;0 nums[i]&gt;=0,则最终target不可能减为0</span></span><br><span class="line">            <span class="keyword">if</span>(target&lt;<span class="number">0</span> &amp;&amp; nums[i]&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            list.add(nums[i]);</span><br><span class="line">            dfs(res,nums,list,i+<span class="number">1</span>,target-nums[i]);</span><br><span class="line">            list.remove(list.size()-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="4-注意点"><a href="#4-注意点" class="headerlink" title="4.注意点"></a>4.注意点</h3><p>1.首先需要对数组进行排序</p>
+<p>2.res.add(new ArrayList&lt;&gt;()),而不是res.add(list);</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/04/21/%E5%9B%9E%E6%BA%AF%E6%B3%95-%E5%9B%9B%E6%95%B0%E4%B9%8B%E5%92%8C/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-双指针-三数之和" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -912,155 +988,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/04/18/%E5%A5%96%E5%AD%A6%E9%87%91/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JVM总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/">JVM总结</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/" class="archive-article-date">
-  	<time datetime="2021-04-17T12:55:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p> 整理笔记：<a target="_blank" rel="noopener" href="https://gitee.com/dracoFei/study-diary/blob/master/JVM/%E7%AC%AC%E4%B8%80%E7%89%88.md#">https://gitee.com/dracoFei/study-diary/blob/master/JVM/%E7%AC%AC%E4%B8%80%E7%89%88.md#</a></p>
-<p>  <img src="C:\Users\JIA\AppData\Roaming\Typora\typora-user-images\image-20210227150517722.png" alt="image-20210227150517722"></p>
-<h3 id="1-什么是Java虚拟机？"><a href="#1-什么是Java虚拟机？" class="headerlink" title="1.什么是Java虚拟机？"></a>1.什么是Java虚拟机？</h3><p>Java虚拟机是一个可以执行Java字节码的虚拟机进程，Java源文件被编译成能被Java虚拟机执行的字节码文件。</p>
-<h3 id="2-JVM内存模型"><a href="#2-JVM内存模型" class="headerlink" title="2.JVM内存模型"></a>2.JVM内存模型</h3><h4 id="线程私有区"><a href="#线程私有区" class="headerlink" title="线程私有区"></a>线程私有区</h4><p>1.程序计数器，每个线程都有一个独立的程序计数器。如果正在执行的是java方法，计数器记录当前指令的地址，如果是Native方法，则为空。</p>
-<p>2.虚拟机栈，每个方法在执行的时候会创建一个栈帧，存储了局部变量，操作数，方法返回地址，每个方法从调用到执行完毕，对应一个栈帧在栈中的入栈和出栈。存放对应的引用。</p>
-<p>3.本地方法栈</p>
-<p>它不是为java方法服务的，而是本地方法（C语言）.</p>
-<h4 id="线程共享区"><a href="#线程共享区" class="headerlink" title="线程共享区"></a>线程共享区</h4><p>1.方法区，用来存放被虚拟机加载的类的数据信息，如常量、静态变量。</p>
-<p>2.堆，存放对象实例和数组，是垃圾回收的主要区域，分为新生代和老年代。</p>
-<h3 id="3-JVM中的性能调优"><a href="#3-JVM中的性能调优" class="headerlink" title="3.JVM中的性能调优"></a>3.JVM中的性能调优</h3><p>设定堆内存大小</p>
-<p>设定新生代大小</p>
-<p>设定垃圾回收器</p>
-<h3 id="4-简述Java垃圾回收机制"><a href="#4-简述Java垃圾回收机制" class="headerlink" title="4.简述Java垃圾回收机制"></a>4.简述Java垃圾回收机制</h3><p>在Java中，程序员不需要显示的释放一个对象的内存，而是由虚拟机自行执行。在JVM中，有一个垃圾回收线程，它是低优先级的，在正常情况下不会执行，只有在虚拟机空闲或者当前堆内存不足时，才会执行，扫描哪些没有被任何引用的对象，并将他们添加到要回收的集合中，进行回收。</p>
-<h3 id="5-如何打破双亲委派机制"><a href="#5-如何打破双亲委派机制" class="headerlink" title="5.如何打破双亲委派机制"></a>5.如何打破双亲委派机制</h3><h4 id="1-重写loadClass-方法"><a href="#1-重写loadClass-方法" class="headerlink" title="1.重写loadClass()方法"></a>1.重写loadClass()方法</h4><p>因为双亲委派机制的实现就是通过这个方法实现的，这个方法可以指定类通过什么加载器进行加载，所以如果我们改写了他的加载规则，就相当于打破了双亲委派机制。</p>
-<h3 id="6-为什么幸存区执行15次才会到老年区？"><a href="#6-为什么幸存区执行15次才会到老年区？" class="headerlink" title="6.为什么幸存区执行15次才会到老年区？"></a>6.为什么幸存区执行15次才会到老年区？</h3><p><img src="C:\Users\jxx\AppData\Roaming\Typora\typora-user-images\image-20210316095503016.png" alt="image-20210316095503016"></p>
-<p>因为对象头中Mark word中age就4位，所以最大为15.</p>
-<h3 id="7-类加载机制"><a href="#7-类加载机制" class="headerlink" title="7.类加载机制"></a>7.类加载机制</h3><p>作者：#半情调<br>链接：<a target="_blank" rel="noopener" href="https://www.nowcoder.com/discuss/621200?channel=-1&amp;source_id=discuss_terminal_discuss_sim_nctrack&amp;ncTraceId=cf18124817f240359ac0c296f3968041.2621.16170124135966917">https://www.nowcoder.com/discuss/621200?channel=-1&amp;source_id=discuss_terminal_discuss_sim_nctrack&amp;ncTraceId=cf18124817f240359ac0c296f3968041.2621.16170124135966917</a><br>来源：牛客网</p>
-<p>虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这就是虚拟机的类加载机制。  </p>
-<p>   类从被加载到虚拟机内存开始，到卸载出内存为止，它的整个生命周期包括：加载、验证、准备、解析、初始化、使用和卸载七个阶段。  </p>
-<p>   <img src="https://uploadfiles.nowcoder.com/files/20210323/4812884_1616468769575/v2-146fdc29d082f955fde70460689ebc29_b.png" alt="img">  </p>
-<h5 id="1-加载"><a href="#1-加载" class="headerlink" title="1.加载"></a>1.加载</h5><p>​    “加载”是”类加载”这个过程的一个阶段，是 “类加载”过程中最先开始进行的操作，加载阶段，虚拟机需要完成三件事：  </p>
-<ol>
-<li>​     <strong>根据类的全限定名获取定义此类的二进制字节流；</strong>   </li>
-<li>​     <strong>将这个字节流代表的静态存储结构转换为方法区的运行时数据结构；</strong>   </li>
-<li>​     <strong>在方法区中为这个类生成一个java.lang.Class对象，作为方法区这个类的访问入口。</strong>   </li>
-</ol>
-<h5 id="2-验证"><a href="#2-验证" class="headerlink" title="2.验证"></a>2.验证</h5><p>   验证是连接的第一步，这一阶段的目的是为了<strong>确保Class文件的字节流包含的信息符合当前虚拟机的要求，并且不会危害到虚拟机自身的安全</strong>。虚拟机如果不检查输入的字节流，对其完全信任的话，很可能会因为载入了有害字节流而导致系统崩溃。  </p>
-<p>   （1）文件格式验证  </p>
-<p>   检查字节流是否符合Class文件格式的规范，并且能被当前版本的虚拟机处理：  </p>
-<ul>
-<li><p>​    是否以魔数0XCAFEBABE开头。   </p>
-</li>
-<li><p>​    主、次版本号是否存在当前虚拟机处理范围内。   </p>
-</li>
-<li><p>​    常量池的常量是否有不被支持的常量类型。   </p>
-</li>
-<li><p>​    … …   </p>
-<p>（2）元数据验证  </p>
-<p>对字节码描述的信息进行语义分析，以保证其描述的信息符合Java语言规范的要求：  </p>
-</li>
-<li><p>​    这个类是否有父类。   </p>
-</li>
-<li><p>​    这个类的父类是否继承了不允许继承的类。   </p>
-</li>
-<li><p>​    如果这个类不是抽象类，是否实现了其父类或接口之中要求实现的所有方法。   </p>
-</li>
-<li><p>​    … …   </p>
-<p>（3）字节码验证  </p>
-<p>（4）符号引用验证  </p>
-</li>
-</ul>
-<h5 id="3-准备"><a href="#3-准备" class="headerlink" title="3.准备"></a>3.准备</h5><p>   准备阶段是<strong>正式为类变量分配内存并设置类变量初始值的阶段</strong>，这些变量所使用的内存都将在方法区中进行分配。  </p>
-<h5 id="4-解析"><a href="#4-解析" class="headerlink" title="4.解析"></a>4.解析</h5><p>   解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程。  </p>
-<h5 id="5-初始化"><a href="#5-初始化" class="headerlink" title="5.初始化"></a>5.初始化</h5><p>   前面的类加载过程中，除了在加载阶段用户应用程序可以通过自定义类加载器参与之外，其余动作完全由虚拟机主导和控制。到了初始化阶段，才真正开始执行类中定义的Java程序代码。  </p>
-<p>   虚拟机规范严格规定了有且只有5种情况必须立即对类进行“初始化”：  </p>
-<p>   （1）遇到new、getstatic、putstatic或invokestatic这4条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。生成这4条指令的最常见的Java代码场景是：使用new关键字实例化对象的时候、读取或设置一个类的静态字段的时候、调用一个类的静态方法的时候。  </p>
-<p>   （2）使用java.lang.reflect包的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。  </p>
-<p>   （3）当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类初始化。  </p>
-<p>   （4）当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的类），虚拟机会先初始化这个主类。  </p>
-<p>   （5）当使用JDK1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄，并且这个方法句柄所对应的类没有进行过初始化，则需要先触发初始化。  </p>
-<h5 id="6-类加载器双亲委派模型"><a href="#6-类加载器双亲委派模型" class="headerlink" title="6.类加载器双亲委派模型"></a>6.类加载器双亲委派模型</h5><p>   从Java虚拟机的角度来说，只存在两种不同的类加载器：一种是启动类加载器（Bootstrap ClassLoader），这个类加载器使用C++语言实现（HotSpot虚拟机中），是虚拟机自身的一部分；另一种就是所有其他的类加载器，这些类加载器都有Java语言实现，独立于虚拟机外部，并且全部继承自java.lang.ClassLoader。  </p>
-<p>   从开发者的角度，类加载器可以细分为：  </p>
-<p>   启动类加载器：负责将 Java_Home/lib下面的类库加载到内存中（比如rt.jar）。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作。  </p>
-<p>   扩展类加载器：由sun.misc.Launcher$ExtClassLoader实现。它负责将Java_Home /lib/ext或者由系统变量 java.ext.dir指定位置中的类库加载到内存中。开发者可以直接使用标准扩展类加载器。  </p>
-<p>   应用程序类加载器：由 sun.misc.Launcher$AppClassLoader实现的。它负责将系统类路径（CLASSPATH）中指定的类库加载到内存中。开发者可以直接使用这个类加载器。  </p>
-<p>   除此之外，还有自定义的类加载器，它们之间的层次关系被称为类加载器的双亲委派模型。该模型要求除了顶层的启动类加载器外，其余的类加载器都应该有自己的父类加载器，而这种父子关系一般通过组合（Composition）关系来实现，而不是通过继承（Inheritance）。  </p>
-<p>   <img src="https://uploadfiles.nowcoder.com/files/20210323/4812884_1616468769673/v2-b4fb2a1d31933e22ccd2d22a70b2fec0_b.png" alt="img">  </p>
-<p>   双亲委派模型的工作原理是，如果一个类加载器收到了类加载请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去执行，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求时，子加载器才会尝试自己去加载。  </p>
-<p>   优势：  </p>
-<p>   （1）采用双亲委派模式的是好处是Java类随着它的类加载器一起具备了一种  <strong>带有优先级的层次关系</strong>  ，通过这种层级关可以  <strong>避免类的重复加载</strong>  ，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。  </p>
-<p>   （2）实现简单，逻辑清晰易懂。</p>
-<h3 id="8-JAVA中四种引用的区别"><a href="#8-JAVA中四种引用的区别" class="headerlink" title="8.JAVA中四种引用的区别"></a>8.JAVA中四种引用的区别</h3><ol>
-<li>强引用:如果一个对象具有强引用，则它不会被垃圾回收器回收。即使当前内存不足，JVM也不会回收它，而是抛出OutOfMemoryError错误，使得程序终止。如果想中断断强引用和某个对象之间的关联，可以显示地将引用赋值为null，这样JVM就在合适的时间回收该对象。</li>
-<li>软引用：具有软引用的对象，如果内存的空间充足，则该对象能够继续被使用，而不会被垃圾回收器回收，只有在内存不足时，弱引用才会被垃圾回收器回收。</li>
-<li>弱引用：具有弱引用的对象，当JVM进行垃圾回收，一旦发现弱引用对象，无论当前内存空间是否充足，都会将弱引用回收。</li>
-<li>虚引用：如果一个对象仅持有虚引用，那么它相当于没有引用，在任何时候都可能被垃圾回收器回收。</li>
-</ol>
-<h3 id="9-JVM如何判断哪些对象可以被回收"><a href="#9-JVM如何判断哪些对象可以被回收" class="headerlink" title="9.JVM如何判断哪些对象可以被回收"></a>9.JVM如何判断哪些对象可以被回收</h3><ol>
-<li><p><strong>引用计数器算法</strong>：给对象添加一个引用计数器，每当有一个地方引用它时，计数器的值就加1；当引用失效时，计数器就会减1，在任何时刻计数器的值为0的对象就是不可能再被使用的，也就是被回收的对象。引用计数器算法效率高，但是主流的JVM并没有采用这种算法来判断可回收对象，因为它有一个致命的缺陷，就是无法解决对象之间循环引用的问题，对于循环引用的对象，无法进行回收。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Object</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> Object instance;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 1</span></span><br><span class="line">        Object objectA = <span class="keyword">new</span> Object();</span><br><span class="line">        Object objectB = <span class="keyword">new</span> Object();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2</span></span><br><span class="line">        objectA.instance = objectB;</span><br><span class="line">        objectB.instance = objectA;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3</span></span><br><span class="line">        objectA = <span class="keyword">null</span>;</span><br><span class="line">        objectB = <span class="keyword">null</span>;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>程序启动之后，objectA和objectB两个对象被创建并在堆中分配内存，虽然他们被置为null,但他们相互引用，也就是说引用计数器的值并不为0，然而事实上，这两个对象已经不可能在2被访问，应该被回收。因此，引用计数器算法就无法告知GC收集器回收他们。</p>
-</li>
-<li><p><strong>可达性分析算法</strong></p>
-</li>
-</ol>
-<p>在主流的JVM中，都是通过可达性分析算法来判断对象是否存活的。其基本思想：通过一系列被称为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索走过的路径称为引用链，当一个对象与GC Roots对象没有任何引用链相连时，就认为GC Roots到这个对象是不可达的，判定为不可用对象，可以被回收。</p>
-<p><img src="https://img-blog.csdn.net/20180228154655527?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzY3OTU0NzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/">展开全文 >></a>
         </p>
       
 
