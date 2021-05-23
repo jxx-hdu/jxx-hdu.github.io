@@ -143,6 +143,77 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-二叉树-二叉树的所有路径" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/05/23/%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/">二叉树-二叉树的所有路径</a>
+    </h1>
+  
+
+        
+        <a href="/2021/05/23/%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/" class="archive-article-date">
+  	<time datetime="2021-05-23T03:05:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定一个二叉树，返回所有从根节点到叶子节点的路径。</p>
+<p><strong>说明:</strong> 叶子节点是指没有子节点的节点。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">输入:</span><br><span class="line"></span><br><span class="line">   <span class="number">1</span></span><br><span class="line"> /   \</span><br><span class="line"><span class="number">2</span>     <span class="number">3</span></span><br><span class="line"> \</span><br><span class="line">  <span class="number">5</span></span><br><span class="line"></span><br><span class="line">输出: [<span class="string">&quot;1-&gt;2-&gt;5&quot;</span>, <span class="string">&quot;1-&gt;3&quot;</span>]</span><br><span class="line"></span><br><span class="line">解释: 所有根节点到叶子节点的路径为: <span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">5</span>, <span class="number">1</span>-&gt;<span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>方法一：递归+回溯</p>
+<p>本题要求根节点到叶子节点的路径，所以应该是采用前序遍历。</p>
+<p>利用list存放当前路径，先将当前节点加入list,如果当前节点的左右孩子都为空，说明当前节点就是叶子节点，当前路径结束。如果左孩子不为空，则递归调用左孩子，当左孩子遍历完之后，应该回溯，再遍历右孩子。</p>
+<p>方法二：迭代：前序遍历</p>
+<p>利用前序遍历的思想，只不过这里需要两个栈，一个用于保存节点，一个用来保存路径</p>
+<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方法一</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val, TreeNode left, TreeNode right) &#123;</span></span><br><span class="line"><span class="comment"> *         this.val = val;</span></span><br><span class="line"><span class="comment"> *         this.left = left;</span></span><br><span class="line"><span class="comment"> *         this.right = right;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">binaryTreePaths</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; res=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line">        ArrayList&lt;Integer&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();<span class="comment">//用于存放路径</span></span><br><span class="line">        help(root,list,res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">help</span><span class="params">(TreeNode root,ArrayList&lt;Integer&gt; list,List&lt;String&gt; res)</span></span>&#123;</span><br><span class="line">        list.add(root.val);</span><br><span class="line">        <span class="keyword">if</span>(root.left==<span class="keyword">null</span> &amp;&amp; root.right==<span class="keyword">null</span>)&#123;</span><br><span class="line">            String path=<span class="string">&quot;&quot;</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;list.size()-<span class="number">1</span>;i++)&#123;</span><br><span class="line">                path+=list.get(i);</span><br><span class="line">                path+=<span class="string">&quot;-&gt;&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            path+=list.get(list.size()-<span class="number">1</span>);</span><br><span class="line">            res.add(path);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(root.left!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            help(root.left,list,res);</span><br><span class="line">            list.remove(list.size()-<span class="number">1</span>);<span class="comment">//回溯</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(root.right!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            help(root.right,list,res);</span><br><span class="line">            list.remove(list.size()-<span class="number">1</span>);<span class="comment">//回溯</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//方法二</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val, TreeNode left, TreeNode right) &#123;</span></span><br><span class="line"><span class="comment"> *         this.val = val;</span></span><br><span class="line"><span class="comment"> *         this.left = left;</span></span><br><span class="line"><span class="comment"> *         this.right = right;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">binaryTreePaths</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; res=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line">        Stack&lt;String&gt; stack2=<span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        Stack&lt;TreeNode&gt; stack=<span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        stack.push(root);</span><br><span class="line">        stack2.push(root.val+<span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="keyword">while</span>(!stack.isEmpty())&#123;</span><br><span class="line">            TreeNode node=stack.pop();</span><br><span class="line">            String path=stack2.pop();</span><br><span class="line">            <span class="keyword">if</span>(node.left==<span class="keyword">null</span> &amp;&amp; node.right==<span class="keyword">null</span>)&#123;</span><br><span class="line">                res.add(path);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(node.right!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                stack.push(node.right);</span><br><span class="line">                stack2.push(path+<span class="string">&quot;-&gt;&quot;</span>+node.right.val);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(node.left!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                stack.push(node.left);</span><br><span class="line">                stack2.push(path+<span class="string">&quot;-&gt;&quot;</span>+node.left.val);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/05/23/%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-完全二叉树的节点个数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -758,75 +829,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/05/13/347-%E5%89%8DK%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-栈和队列-逆波兰表达式求值" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/07/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97-%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/">栈和队列-逆波兰表达式求值</a>
-    </h1>
-  
-
-        
-        <a href="/2021/05/07/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97-%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/" class="archive-article-date">
-  	<time datetime="2021-05-07T14:06:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>根据 逆波兰表示法，求表达式的值。</p>
-<p>有效的算符包括 +、-、*、/ 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。</p>
-<p>说明：</p>
-<p>整数除法只保留整数部分。<br>给定逆波兰表达式总是有效的。换句话说，表达式总会得出有效数值且不存在除数为 0 的情况。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line">输入：tokens &#x3D; [&quot;2&quot;,&quot;1&quot;,&quot;+&quot;,&quot;3&quot;,&quot;*&quot;]</span><br><span class="line">输出：9</span><br><span class="line">解释：该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) &#x3D; 9</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：tokens &#x3D; [&quot;4&quot;,&quot;13&quot;,&quot;5&quot;,&quot;&#x2F;&quot;,&quot;+&quot;]</span><br><span class="line">输出：6</span><br><span class="line">解释：该算式转化为常见的中缀算术表达式为：(4 + (13 &#x2F; 5)) &#x3D; 6</span><br><span class="line">示例 3：</span><br><span class="line"></span><br><span class="line">输入：tokens &#x3D; [&quot;10&quot;,&quot;6&quot;,&quot;9&quot;,&quot;3&quot;,&quot;+&quot;,&quot;-11&quot;,&quot;*&quot;,&quot;&#x2F;&quot;,&quot;*&quot;,&quot;17&quot;,&quot;+&quot;,&quot;5&quot;,&quot;+&quot;]</span><br><span class="line">输出：22</span><br><span class="line">解释：</span><br><span class="line">该算式转化为常见的中缀算术表达式为：</span><br><span class="line">  ((10 * (6 &#x2F; ((9 + 3) * -11))) + 17) + 5</span><br><span class="line">&#x3D; ((10 * (6 &#x2F; (12 * -11))) + 17) + 5</span><br><span class="line">&#x3D; ((10 * (6 &#x2F; -132)) + 17) + 5</span><br><span class="line">&#x3D; ((10 * 0) + 17) + 5</span><br><span class="line">&#x3D; (0 + 17) + 5</span><br><span class="line">&#x3D; 17 + 5</span><br><span class="line">&#x3D; 22</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>根据题意可得，如果字符为+ - * /,则将前两个元素进行计算，将其结果继续进行接下来的运算。于是栈比较符合，例如当前元素为+，则出栈两个元素，将他们进行求和，将求和结果入栈，直到遍历所有元素，最后将结果出栈即可。</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">evalRPN</span><span class="params">(String[] tokens)</span> </span>&#123;</span><br><span class="line">        Stack&lt;String&gt; stack=<span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;tokens.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(tokens[i].equals(<span class="string">&quot;+&quot;</span>))&#123;</span><br><span class="line">                <span class="keyword">int</span> m=Integer.parseInt(stack.pop());</span><br><span class="line">                <span class="keyword">int</span> n=Integer.parseInt(stack.pop());</span><br><span class="line">                String s=String.valueOf(n+m);</span><br><span class="line">                stack.push(s);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(tokens[i].equals(<span class="string">&quot;-&quot;</span>))&#123;</span><br><span class="line">                <span class="keyword">int</span> m=Integer.parseInt(stack.pop());</span><br><span class="line">                <span class="keyword">int</span> n=Integer.parseInt(stack.pop());</span><br><span class="line">                String s=String.valueOf(n-m);</span><br><span class="line">                stack.push(s);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(tokens[i].equals(<span class="string">&quot;*&quot;</span>))&#123;</span><br><span class="line">                <span class="keyword">int</span> m=Integer.parseInt(stack.pop());</span><br><span class="line">                <span class="keyword">int</span> n=Integer.parseInt(stack.pop());</span><br><span class="line">                String s=String.valueOf(n*m);</span><br><span class="line">                stack.push(s);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(tokens[i].equals(<span class="string">&quot;/&quot;</span>))&#123;</span><br><span class="line">                <span class="keyword">int</span> m=Integer.parseInt(stack.pop());</span><br><span class="line">                <span class="keyword">int</span> n=Integer.parseInt(stack.pop());</span><br><span class="line">                String s=String.valueOf(n/m);</span><br><span class="line">                stack.push(s);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            stack.push(tokens[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Integer.parseInt(stack.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/05/07/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97-%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/">展开全文 >></a>
         </p>
       
 
