@@ -6,15 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Jia</title>
+  <title>为什么StringBuilder是线程不安全的 | Jia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人技术博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Jia">
-<meta property="og:url" content="http://example.com/page/4/index.html">
+  <meta name="description" content="1.String与StringBuilder、StringBufferString底层是使用字符数组保存字符串，因为有final修饰符，因此string对象是不可变的 private final char value[]; StringBuilder与StringBuffer都继承自AbstractStringBuilder类，在这个类中也是使用字符串数组保存字符串，其没有final修饰，因此可知">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么StringBuilder是线程不安全的">
+<meta property="og:url" content="http://example.com/2021/07/10/%E4%B8%BA%E4%BB%80%E4%B9%88StringBuilder%E6%98%AF%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84/index.html">
 <meta property="og:site_name" content="Jia">
-<meta property="og:description" content="个人技术博客">
+<meta property="og:description" content="1.String与StringBuilder、StringBufferString底层是使用字符数组保存字符串，因为有final修饰符，因此string对象是不可变的 private final char value[]; StringBuilder与StringBuffer都继承自AbstractStringBuilder类，在这个类中也是使用字符串数组保存字符串，其没有final修饰，因此可知">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-10T03:43:10.000Z">
+<meta property="article:modified_time" content="2021-07-10T03:47:44.199Z">
 <meta property="article:author" content="Jiaxiangxiang">
 <meta name="twitter:card" content="summary">
   
@@ -141,84 +143,68 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-Swagger" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-为什么StringBuilder是线程不安全的" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/20/Swagger/">Swagger</a>
+    <h1 class="article-title" itemprop="name">
+      为什么StringBuilder是线程不安全的
     </h1>
   
 
         
-        <a href="/2021/04/20/Swagger/" class="archive-article-date">
-  	<time datetime="2021-04-20T01:34:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-20</time>
+        <a href="/2021/07/10/%E4%B8%BA%E4%BB%80%E4%B9%88StringBuilder%E6%98%AF%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84/" class="archive-article-date">
+  	<time datetime="2021-07-10T03:43:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1-Swagger简介"><a href="#1-Swagger简介" class="headerlink" title="1.Swagger简介"></a>1.Swagger简介</h3><ul>
-<li>号称世界上最流行的Api框架</li>
-<li>RestFul Api文档在线自动生成工具=》Api文档与API定义同步更新</li>
-<li>直接运行，可以在线测试API接口</li>
-<li>支持多种语言（Java php）</li>
-</ul>
-<h3 id="2-在项目中使用Swagger需要的两个包"><a href="#2-在项目中使用Swagger需要的两个包" class="headerlink" title="2.在项目中使用Swagger需要的两个包"></a>2.在项目中使用Swagger需要的两个包</h3><ol>
-<li>springfox-swagger2</li>
-<li>springfox-swagger-ui</li>
-</ol>
-<h3 id="3-springboot集成Swagger"><a href="#3-springboot集成Swagger" class="headerlink" title="3.springboot集成Swagger"></a>3.springboot集成Swagger</h3><ol>
-<li><p>新建一个springboot=web项目</p>
-</li>
-<li><p>导入相关依赖</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- https:<span class="comment">//mvnrepository.com/artifact/io.springfox/springfox-swagger2 --&gt;</span></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;io.springfox&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.9.2&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;!-- https:<span class="comment">//mvnrepository.com/artifact/io.springfox/springfox-swagger-ui --&gt;</span></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;io.springfox&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.9.2&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p>编写hello工程</p>
-</li>
-<li><p>配置Swagger ,编写Config</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>测试运行：<a target="_blank" rel="noopener" href="http://localhost:8080/swagger-ui.html">http://localhost:8080/swagger-ui.html</a></p>
-</li>
-</ol>
-<h3 id="4-配置Swagger"><a href="#4-配置Swagger" class="headerlink" title="4.配置Swagger"></a>4.配置Swagger</h3><p>Swagger的bean实例Docket;</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    配置了Swagger的docket的bean实例</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">docket</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">                .apiInfo(apiInfo());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//配置Swagger信息-》apiInfo</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ApiInfo <span class="title">apiInfo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//作者信息</span></span><br><span class="line">        Contact contact = <span class="keyword">new</span> Contact(<span class="string">&quot;jxx&quot;</span>,</span><br><span class="line">                <span class="string">&quot;https://blog.csdn.net/Mr_Jiax?spm=1001.2101.3001.5343&quot;</span>,</span><br><span class="line">                <span class="string">&quot;1395462145@qq.com&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ApiInfo(<span class="string">&quot;jia的SwaggerAPI文档&quot;</span>,</span><br><span class="line">                <span class="string">&quot;再小的帆也能远航&quot;</span>,</span><br><span class="line">                <span class="string">&quot;1.0&quot;</span>,</span><br><span class="line">                <span class="string">&quot;https://blog.csdn.net/Mr_Jiax?spm=1001.2101.3001.5343&quot;</span>,</span><br><span class="line">                contact,</span><br><span class="line">                <span class="string">&quot;Apache 2.0&quot;</span>,</span><br><span class="line">                <span class="string">&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;</span>,</span><br><span class="line">                <span class="keyword">new</span> ArrayList());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="5-Swagger配置扫描接口"><a href="#5-Swagger配置扫描接口" class="headerlink" title="5.Swagger配置扫描接口"></a>5.Swagger配置扫描接口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">docket</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">            .apiInfo(apiInfo())</span><br><span class="line">            <span class="comment">//RequestHandlerSelectors配置要扫描接口的方式</span></span><br><span class="line">            <span class="comment">//basePackage:指定要扫描的包</span></span><br><span class="line">            <span class="comment">//</span></span><br><span class="line">            .select()</span><br><span class="line">            .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.kuang.swagger.controller&quot;</span>))</span><br><span class="line">            <span class="comment">//paths()，指名只扫描带有/kuang下的请求路径</span></span><br><span class="line">            .paths(PathSelectors.ant(<span class="string">&quot;/kuang/**&quot;</span>))</span><br><span class="line">            .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="6-配置是否启动Swagger"><a href="#6-配置是否启动Swagger" class="headerlink" title="6.配置是否启动Swagger"></a>6.配置是否启动Swagger</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">docket</span><span class="params">()</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">               .apiInfo(apiInfo())</span><br><span class="line">               .enable(<span class="keyword">false</span>)</span><br><span class="line">               <span class="comment">//RequestHandlerSelectors配置要扫描接口的方式</span></span><br><span class="line">               <span class="comment">//basePackage:指定要扫描的包</span></span><br><span class="line">               <span class="comment">//</span></span><br><span class="line">               .select()</span><br><span class="line">               .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.kuang.swagger.controller&quot;</span>))</span><br><span class="line">               <span class="comment">//paths()，指名只扫描带有/kuang下的请求路径</span></span><br><span class="line">               .paths(PathSelectors.ant(<span class="string">&quot;/kuang/**&quot;</span>))</span><br><span class="line">               .build();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>其中的enable(),可以设置是否启动，默认为true,如果设置为false,则swagger不再浏览器中访问</p>
-<h3 id="7-如果希望Swagger在生产环境中使用，而在发布的时候不使用，该怎么做？"><a href="#7-如果希望Swagger在生产环境中使用，而在发布的时候不使用，该怎么做？" class="headerlink" title="7.如果希望Swagger在生产环境中使用，而在发布的时候不使用，该怎么做？"></a>7.如果希望Swagger在生产环境中使用，而在发布的时候不使用，该怎么做？</h3><ul>
-<li><p>判断是不是生产环境</p>
-</li>
-<li><p>注入enable（flag）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Profiles profiles=Profiles.of(<span class="string">&quot;dev&quot;</span>);</span><br><span class="line">  <span class="comment">//获取项目的环境：environment.acceptsProfiles判断是否处于自己设定的环境中</span></span><br><span class="line">  <span class="keyword">boolean</span> flag = environment.acceptsProfiles(profiles);</span><br></pre></td></tr></table></figure>
-<h3 id="8-配置API文档的分组"><a href="#8-配置API文档的分组" class="headerlink" title="8.配置API文档的分组"></a>8.配置API文档的分组</h3></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.groupName(&quot;jxx&quot;)</span><br></pre></td></tr></table></figure>
-<p><img src="/images/image-20210420110456848.png" alt="image-20210420110456848"></p>
-<p>如何配置多个分组</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Docket <span class="title">docket1</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Docket <span class="title">docket2</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Docket <span class="title">docket3</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;C&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="/images/image-20210420111103488.png" alt="image-20210420111103488"></p>
-<h3 id="9-测试功能"><a href="#9-测试功能" class="headerlink" title="9.测试功能"></a>9.测试功能</h3><p>实体类</p>
-<p>注意：实体类中的属性需要有set和get方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ApiModel(&quot;用户实体类&quot;)</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@ApiModelProperty(&quot;用户名&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String username;</span><br><span class="line">    <span class="meta">@ApiModelProperty(&quot;密码&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Controller</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/hello&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//只要我们的接口，返回值中存在实体类，他就会被扫描到Swagger中</span></span><br><span class="line">    <span class="meta">@PostMapping(value = &quot;/user&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">user</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/test&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">test</span><span class="params">(User user)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/images/image-20210420142704644.png" alt="image-20210420142704644"></p>
-<p><img src="/images/image-20210420142754083.png" alt="image-20210420142754083"></p>
-<p>测试结果</p>
-<p><img src="/images/Swagger/image-20210420142811399.png" alt="image-20210420142811399"></p>
-<h3 id="10-总结"><a href="#10-总结" class="headerlink" title="10.总结"></a>10.总结</h3><p>1.我们可以通过Swagger给一些比较难理解的属性或者接口增加注释信息</p>
-<p>2.接口文档实时更新</p>
-<p>3.可以在线测试</p>
-<p>Swagger是一个优秀的工具。</p>
-<p>注意：在正式发布的时候，关闭Swagger！！！</p>
-
+        <h3 id="1-String与StringBuilder、StringBuffer"><a href="#1-String与StringBuilder、StringBuffer" class="headerlink" title="1.String与StringBuilder、StringBuffer"></a>1.String与StringBuilder、StringBuffer</h3><p>String底层是使用字符数组保存字符串，因为有final修饰符，因此string对象是不可变的</p>
+<p>private final char value[];</p>
+<p>StringBuilder与StringBuffer都继承自AbstractStringBuilder类，在这个类中也是使用字符串数组保存字符串，其没有final修饰，因此可知这两种对象都是可变的。</p>
+<p>char[] value；</p>
+<h3 id="2-为什么StringBuilder线程不安全"><a href="#2-为什么StringBuilder线程不安全" class="headerlink" title="2.为什么StringBuilder线程不安全"></a>2.为什么StringBuilder线程不安全</h3><p>我们利用代码测试一下：创建10个线程，每个线程向StringBuilder中追加字符1000次，则最终得到StringBuilder的大小应该为10000。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringBuilderTest</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*验证为什么StringBuilder是线程不安全的*/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        StringBuilder sb=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">1000</span>;j++)&#123;</span><br><span class="line">                        sb.append(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        System.out.println(sb.length());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但结果却是5571，为什么输出值与期望不一样，我们来看StringBuilder种的append（）方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> StringBuilder <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.append(str);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其调用父类AbstractStringBuilder类的append方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> AbstractStringBuilder <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (str == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> appendNull();</span><br><span class="line">    <span class="keyword">int</span> len = str.length();</span><br><span class="line">    ensureCapacityInternal(count + len);</span><br><span class="line">    str.getChars(<span class="number">0</span>, len, value, count);</span><br><span class="line">    count += len;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中count+=len不是一个原子操作，当两个线程同时执行count+=len时，两个线程执行完后count值加1，而不是加2，所以这就是为什么输出值要小于预期值。</p>
+<h3 id="3-为什么StringBuffer线程安全"><a href="#3-为什么StringBuffer线程安全" class="headerlink" title="3.为什么StringBuffer线程安全"></a>3.为什么StringBuffer线程安全</h3><p>把StringBuilder换成StringBuffer就是线程安全的。因为StringBuffer中append方法加了synchorized关键字</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> StringBuffer <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    toStringCache = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">super</span>.append(str);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -227,16 +213,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/20/Swagger/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/07/10/%E4%B8%BA%E4%BB%80%E4%B9%88StringBuilder%E6%98%AF%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2021/05/28/%E4%BA%8C%E5%8F%89%E6%A0%91-%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">二叉树-构造二叉树</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -256,789 +301,14 @@
 
 
 
-
-  
-    <article id="post-哈希-赎金信" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/19/%E5%93%88%E5%B8%8C-%E8%B5%8E%E9%87%91%E4%BF%A1/">哈希-赎金信</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/19/%E5%93%88%E5%B8%8C-%E8%B5%8E%E9%87%91%E4%BF%A1/" class="archive-article-date">
-  	<time datetime="2021-04-19T14:26:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定一个赎金信 (ransom) 字符串和一个杂志(magazine)字符串，判断第一个字符串 ransom 能不能由第二个字符串 magazines 里面的字符构成。如果可以构成，返回 true ；否则返回 false。</p>
-<p>(题目说明：为了不暴露赎金信字迹，要从杂志上搜索各个需要的字母，组成单词来表达意思。杂志字符串中的每个字符只能在赎金信字符串中使用一次。)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：ransomNote &#x3D; &quot;a&quot;, magazine &#x3D; &quot;b&quot;</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：ransomNote &#x3D; &quot;aa&quot;, magazine &#x3D; &quot;ab&quot;</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：ransomNote &#x3D; &quot;aa&quot;, magazine &#x3D; &quot;aab&quot;</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><ul>
-<li>将两个字符串中的字符存入两个Hashmap中，key表示字符，value对应该字符在当前字符串中出现的次数；</li>
-<li>遍历第一个字符串对应的map中的key1,如果第2个map中也包含该key1,且对应值value2大于等于value1,则返回true,否则返回false</li>
-</ul>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">canConstruct</span><span class="params">(String ransomNote, String magazine)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//将两个</span></span><br><span class="line">        HashMap&lt;Character,Integer&gt; map=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;ransomNote.length();i++)&#123;</span><br><span class="line">            map.put(ransomNote.charAt(i),map.getOrDefault(ransomNote.charAt(i),<span class="number">0</span>)+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        HashMap&lt;Character,Integer&gt; map1=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;magazine.length();i++)&#123;</span><br><span class="line">            map1.put(magazine.charAt(i),map1.getOrDefault(magazine.charAt(i),<span class="number">0</span>)+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Set&lt;Character&gt; keyset=map.keySet();</span><br><span class="line">        <span class="keyword">for</span>(Character key:keyset)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!map1.containsKey(key) || map1.get(key)&lt;map.get(key))&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/19/%E5%93%88%E5%B8%8C-%E8%B5%8E%E9%87%91%E4%BF%A1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-哈希-四数相加（2）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/">哈希-四数相加（2）</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/" class="archive-article-date">
-  	<time datetime="2021-04-19T13:57:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定四个包含整数的数组列表 A , B , C , D ,计算有多少个元组 (i, j, k, l) ，使得 A[i] + B[j] + C[k] + D[l] = 0。</p>
-<p>为了使问题简单化，所有的 A, B, C, D 具有相同的长度 N，且 0 ≤ N ≤ 500 。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">输入:</span><br><span class="line">A &#x3D; [ 1, 2]</span><br><span class="line">B &#x3D; [-2,-1]</span><br><span class="line">C &#x3D; [-1, 2]</span><br><span class="line">D &#x3D; [ 0, 2]</span><br><span class="line"></span><br><span class="line">输出:</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">解释:</span><br><span class="line">两个元组如下:</span><br><span class="line">1. (0, 0, 0, 1) -&gt; A[0] + B[0] + C[0] + D[1] &#x3D; 1 + (-2) + (-1) + 2 &#x3D; 0</span><br><span class="line">2. (1, 1, 0, 0) -&gt; A[1] + B[1] + C[0] + D[0] &#x3D; 2 + (-1) + (-1) + 0 &#x3D; 0</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>本题采用分组+哈希表的方式进行求解</p>
-<p>首先将四个数组分成AB,CD两部分</p>
-<p>对于AB，我们采用二层循环对他们进行遍历，得到的A[i]+B[j]的值作为哈希的key，(i,j)出现的次数作为value，存入map中，</p>
-<p>对于CD，同样采用二层循环遍历，当出现-（C[m]+d[n]）出现在map中，则count加上对应的value</p>
-<p>最后返回count</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fourSumCount</span><span class="params">(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2, <span class="keyword">int</span>[] nums3, <span class="keyword">int</span>[] nums4)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//四个数相加等价为两个数相加</span></span><br><span class="line">        HashMap&lt;Integer,Integer&gt; mapAB=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i:nums1)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j:nums2)&#123;</span><br><span class="line">                mapAB.put(i+j,mapAB.getOrDefault(i+j,<span class="number">0</span>)+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果在CD中找到两个数之和的相反数在map中，则count++</span></span><br><span class="line">        <span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> m:nums3)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> n:nums4)&#123;</span><br><span class="line">                <span class="keyword">if</span>(mapAB.containsKey(-m-n))&#123;</span><br><span class="line">                    count+=mapAB.get(-m-n);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/19/%E5%93%88%E5%B8%8C-%E5%9B%9B%E6%95%B0%E7%9B%B8%E5%8A%A0%EF%BC%882%EF%BC%89/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-优先级队列" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/">优先级队列</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/" class="archive-article-date">
-  	<time datetime="2021-04-19T02:41:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-应用背景"><a href="#1-应用背景" class="headerlink" title="1.应用背景"></a>1.应用背景</h3><p><strong>使用场景：当先按照一个变量进行排序，然后当该变量相同时，按照另外一个变量进行排序。</strong></p>
-<p>例如:牛牛是一家广告公司的员工，一天的工作很固定，就是将k条新的广告，按照注册用户所设定的时间顺序发放到用户的邮箱。假设某用户设定的时间为t，那么，这位用户接收第一封广告的时间为t，接收第二封广告的时间为2<em>t,接收第三封广告的时刻为3</em>t…..依次类推。</p>
-<h4 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h4><p>第一行输入两个正整数n,k,依次代表用户数量，以及今天需要发送的广告数量。第2行到第n+1行，每行一个正整数t,其中第i+1行输入的正整数，代表编号为i的用户，所设定的时间t</p>
-<h4 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述"></a>输出描述</h4><p>输出一共k行，按照发放广告的时间顺序，依次输出用户的编号，如果某一时间，有多个用户可以接收广告，则优先给用户编号小的发放。</p>
-<p>输入用例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">3 3</span><br><span class="line">3</span><br><span class="line">6</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
-<p>输出用例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">1</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>经过分析可得，本题先按照时间进行排序，然后在根据编号进行排序，所以采用优先队列进行处理。</p>
-<p>首先定义一个类，该类中具有两个属性，分别为时间time和编号id</p>
-<p>然后自定义比较规则</p>
-<p>最后输出前k个元素对应的id</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.kuang.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sun.awt.datatransfer.DataTransferer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@autuor</span> jxx</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2021-04-18-20:20</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//自定义一个类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> time,<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.time=time;</span><br><span class="line">        <span class="keyword">this</span>.id=id;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> time;</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="comment">//自定义比较类，先比较num，num按升序排列，若num相等在比较id,id升序</span></span><br><span class="line">    <span class="keyword">static</span> Comparator&lt;Node&gt; Node=<span class="keyword">new</span> Comparator&lt;Node&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Node o1,Node o2)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(o1.time!=o2.time)&#123;</span><br><span class="line">                <span class="keyword">return</span> o1.time-o2.time;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> o1.id-o2.id;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        BufferedReader br=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">        String[] str=br.readLine().split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        <span class="keyword">int</span> n=Integer.parseInt(str[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">int</span> count=Integer.parseInt(str[<span class="number">1</span>]);</span><br><span class="line">        Queue&lt;Node&gt; q=<span class="keyword">new</span> PriorityQueue&lt;&gt;(Node);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> a=Integer.parseInt(br.readLine());</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=count;j++)&#123;</span><br><span class="line">                q.add(<span class="keyword">new</span> Node(a*j,i));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;count;i++)&#123;</span><br><span class="line">            System.out.println(q.poll().id);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/19/%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-自定义排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">自定义排序</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-  	<time datetime="2021-04-19T01:10:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-二维数组的自定义排序"><a href="#1-二维数组的自定义排序" class="headerlink" title="1.二维数组的自定义排序"></a>1.二维数组的自定义排序</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[][] num=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>][<span class="number">10</span>];</span><br><span class="line"><span class="comment">//对数组num按照第1列进行升序排序</span></span><br><span class="line">Arrays.sort(num,(o1,o2)-&gt;<span class="number">01</span>[<span class="number">0</span>]-o2[<span class="number">0</span>]);</span><br><span class="line"><span class="comment">//对数组num按照第2列进行升序排序</span></span><br><span class="line">Arrays.sort(num,(o1,o2)-&gt;o1[<span class="number">1</span>]-o2[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//对数组num按照第1列进行降序排序</span></span><br><span class="line">Arrays.sort(num,(o1,o2)-&gt;<span class="number">02</span>[<span class="number">0</span>]-o1[<span class="number">0</span>]);</span><br><span class="line"><span class="comment">//对数组num按照第2列进行降序排序</span></span><br><span class="line">Arrays.sort(num,(o1,o2)-&gt;o2[<span class="number">1</span>]-o1[<span class="number">1</span>]);</span><br></pre></td></tr></table></figure>
-<h3 id="2-Map集合的自定义排序"><a href="#2-Map集合的自定义排序" class="headerlink" title="2.Map集合的自定义排序"></a>2.Map集合的自定义排序</h3><p>如果需要根据key进行排序，则直接利用TreeMap;</p>
-<p>如果需要根据value进行排序，则方法如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"> List&lt;Map.Entry&lt;Integer,Integer&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;(map.entrySet()); <span class="comment">//将map的entryset放入list集合</span></span><br><span class="line">        <span class="comment">//对list进行排序，并通过Comparator传入自定义的排序规则</span></span><br><span class="line">        Collections.sort(list,<span class="keyword">new</span> Comparator&lt;Map.Entry&lt;Integer, Integer&gt;&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Map.Entry&lt;Integer, Integer&gt; o1, Map.Entry&lt;Integer, Integer&gt; o2)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> o1.getValue()-o2.getValue(); <span class="comment">//重写排序规则,对value进行排序</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">		<span class="comment">//可以将key和value放入二维数组中</span></span><br><span class="line">        <span class="keyword">int</span>[][] keynum=<span class="keyword">new</span> <span class="keyword">int</span>[list.size()][<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">int</span> k=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> l=<span class="number">0</span>;</span><br><span class="line">        <span class="comment">//用迭代器对list中的键值对元素进行遍历</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; list.size(); i++) &#123;</span><br><span class="line"><span class="comment">//            System.out.println(list.get(i).getKey() + &quot;: &quot; + list.get(i).getValue());</span></span><br><span class="line">             keynum[k++][<span class="number">1</span>]=list.get(i).getValue();</span><br><span class="line">             keynum[l++][<span class="number">0</span>]=list.get(i).getKey();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="3-map集合的遍历"><a href="#3-map集合的遍历" class="headerlink" title="3.map集合的遍历"></a>3.map集合的遍历</h3><p>map集合的遍历方法一：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;Integer&gt; keyset=map.keySet();</span><br><span class="line">    <span class="keyword">for</span>(Integer key:keyset)&#123;</span><br><span class="line">        Integer value=map.get(key);</span><br><span class="line">        System.out.println(key+<span class="string">&quot; &quot;</span>+value);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>也可以对键和值单独遍历</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">        <span class="keyword">for</span>(Integer key:map.keySet())&#123;</span><br><span class="line">            System.out.print(key+<span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(Integer value:map.values())&#123;</span><br><span class="line">            System.out.print(value+<span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//如果想把遍历的值放入数组中，则代码如下：</span></span><br><span class="line">		<span class="keyword">int</span>[] keynum=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">int</span> k=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(Integer key:map.keySet())&#123;</span><br><span class="line">            keynum[k++]=key;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/19/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-哈希-快乐数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/">哈希-快乐数</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2021-04-18T11:38:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>编写一个算法来判断一个数 n 是不是快乐数。</p>
-<p>「快乐数」定义为：</p>
-<p>对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。<br>然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。<br>如果 可以变为  1，那么这个数就是快乐数。<br>如果 n 是快乐数就返回 true ；不是，则返回 false 。</p>
-<p>示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：19</span><br><span class="line">输出：true</span><br><span class="line">解释：</span><br><span class="line">12 + 92 &#x3D; 82</span><br><span class="line">82 + 22 &#x3D; 68</span><br><span class="line">62 + 82 &#x3D; 100</span><br><span class="line">12 + 02 + 02 &#x3D; 1</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：n &#x3D; 2</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>经过分析可得最后sum要么为1，返回true</p>
-<p>要么会出现环，此时sum会重复出现，</p>
-<p>所以本题采用set集合，如果set中包含sum，则返回false,否则将sum放入集合，如果sum==1返回true</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isHappy</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//如果最终等于1，则为快乐数</span></span><br><span class="line">        <span class="comment">//如果sum重复出现，则返回false</span></span><br><span class="line">        Set&lt;Integer&gt; set=<span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> sum=n;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            sum=getValue(sum);</span><br><span class="line">            <span class="keyword">if</span>(sum==<span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(set.contains(sum))&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            set.add(sum);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//计算值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getValue</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(n!=<span class="number">0</span>)&#123;</span><br><span class="line">            sum+=((n%<span class="number">10</span>)*(n%<span class="number">10</span>));</span><br><span class="line">            n=n/<span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-奖学金" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/18/%E5%A5%96%E5%AD%A6%E9%87%91/">奖学金</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/18/%E5%A5%96%E5%AD%A6%E9%87%91/" class="archive-article-date">
-  	<time datetime="2021-04-18T10:36:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>小v今年有n门课，每门都有考试，为了拿到奖学金，小v必须让自己的平均成绩至少为avg。每门课由平时成绩和考试成绩组成，满分为r。现在他知道每门课的平时成绩为ai ,若想让这门课的考试成绩多拿一分的话，小v要花bi 的时间复习，不复习的话当然就是0分。同时我们显然可以发现复习得再多也不会拿到超过满分的分数。为了拿到奖学金，小v至少要花多少时间复习。</p>
-<h5 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述:"></a>输入描述:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">第一行三个整数n,r,avg(n大于等于1小于等于1e5，r大于等于1小于等于1e9,avg大于等于1小于等于1e6)，接下来n行，每行两个整数ai和bi，均小于等于1e6大于等于1</span><br></pre></td></tr></table></figure>
-<h5 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述:"></a>输出描述:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一行输出答案。</span><br></pre></td></tr></table></figure>
-<p>示例1</p>
-<h5 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">5 10 9</span><br><span class="line">0 5</span><br><span class="line">9 1</span><br><span class="line">8 1</span><br><span class="line">0 1</span><br><span class="line">9 100</span><br></pre></td></tr></table></figure>
-<h5 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">43</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>1.首先判断想要获得奖学金最小需要多少分sum</p>
-<p>2.将数据存入二维数组中，然后对二维数组的第2列进行排序</p>
-<p>3.计算目前总得分，如果目前得分大于sum，则返回0</p>
-<p>4如果不大于sum，则计算还需要多少分才need能行，于是从数组第一行（第一门课）开始算，当这门课目前得分小于最高得分，则时间res+=num[i][1],need–;直到need==0为止。</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        BufferedReader br=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">        String s=br.readLine();</span><br><span class="line">           <span class="keyword">while</span>(s!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            String[] str=s.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">            <span class="keyword">int</span> n=Integer.parseInt(str[<span class="number">0</span>]);</span><br><span class="line">            <span class="keyword">int</span> r=Integer.parseInt(str[<span class="number">1</span>]);</span><br><span class="line">            <span class="keyword">int</span> avg=Integer.parseInt(str[<span class="number">2</span>]);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">long</span> sum=n*avg;</span><br><span class="line">            <span class="keyword">int</span>[][] num=<span class="keyword">new</span> <span class="keyword">int</span>[n][<span class="number">2</span>];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">                String[] str1=br.readLine().split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">                num[i][<span class="number">0</span>]=Integer.parseInt(str1[<span class="number">0</span>]);</span><br><span class="line">                num[i][<span class="number">1</span>]=Integer.parseInt(str1[<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">           <span class="comment">//将二维数组对第2列排序</span></span><br><span class="line">           Arrays.sort(num,(o1,o2)-&gt;o1[<span class="number">1</span>]-o2[<span class="number">1</span>]);</span><br><span class="line">            <span class="comment">//计算已经得到的分数</span></span><br><span class="line">           <span class="keyword">long</span> cur=<span class="number">0</span>;</span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">               cur+=num[i][<span class="number">0</span>];</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="comment">//如果目前得分已经大于要求，则返回0</span></span><br><span class="line">           <span class="keyword">if</span>(cur&gt;=sum)&#123;</span><br><span class="line">               System.out.println(<span class="number">0</span>);</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">long</span> need=sum-cur;</span><br><span class="line">           <span class="keyword">long</span> res=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">                <span class="keyword">while</span>(num[i][<span class="number">0</span>]&lt;r)&#123;</span><br><span class="line">                    res+=(num[i][<span class="number">1</span>]);</span><br><span class="line">                    need-=<span class="number">1</span>;</span><br><span class="line">                    <span class="keyword">if</span>(need==<span class="number">0</span>)&#123;</span><br><span class="line">                        System.out.println(res);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    num[i][<span class="number">0</span>]+=<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(need==<span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">               &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            s=br.readLine();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/18/%E5%A5%96%E5%AD%A6%E9%87%91/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-JVM总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/">JVM总结</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/" class="archive-article-date">
-  	<time datetime="2021-04-17T12:55:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p> 整理笔记：<a target="_blank" rel="noopener" href="https://gitee.com/dracoFei/study-diary/blob/master/JVM/%E7%AC%AC%E4%B8%80%E7%89%88.md#">https://gitee.com/dracoFei/study-diary/blob/master/JVM/%E7%AC%AC%E4%B8%80%E7%89%88.md#</a></p>
-<p>  <img src="C:\Users\JIA\AppData\Roaming\Typora\typora-user-images\image-20210227150517722.png" alt="image-20210227150517722"></p>
-<h3 id="1-什么是Java虚拟机？"><a href="#1-什么是Java虚拟机？" class="headerlink" title="1.什么是Java虚拟机？"></a>1.什么是Java虚拟机？</h3><p>Java虚拟机是一个可以执行Java字节码的虚拟机进程，Java源文件被编译成能被Java虚拟机执行的字节码文件。</p>
-<h3 id="2-JVM内存模型"><a href="#2-JVM内存模型" class="headerlink" title="2.JVM内存模型"></a>2.JVM内存模型</h3><h4 id="线程私有区"><a href="#线程私有区" class="headerlink" title="线程私有区"></a>线程私有区</h4><p>1.程序计数器，每个线程都有一个独立的程序计数器。如果正在执行的是java方法，计数器记录当前指令的地址，如果是Native方法，则为空。</p>
-<p>2.虚拟机栈，每个方法在执行的时候会创建一个栈帧，存储了局部变量，操作数，方法返回地址，每个方法从调用到执行完毕，对应一个栈帧在栈中的入栈和出栈。存放对应的引用。</p>
-<p>3.本地方法栈</p>
-<p>它不是为java方法服务的，而是本地方法（C语言）.</p>
-<h4 id="线程共享区"><a href="#线程共享区" class="headerlink" title="线程共享区"></a>线程共享区</h4><p>1.方法区，用来存放被虚拟机加载的类的数据信息，如常量、静态变量。</p>
-<p>2.堆，存放对象实例和数组，是垃圾回收的主要区域，分为新生代和老年代。</p>
-<h3 id="3-JVM中的性能调优"><a href="#3-JVM中的性能调优" class="headerlink" title="3.JVM中的性能调优"></a>3.JVM中的性能调优</h3><p>设定堆内存大小</p>
-<p>设定新生代大小</p>
-<p>设定垃圾回收器</p>
-<h3 id="4-简述Java垃圾回收机制"><a href="#4-简述Java垃圾回收机制" class="headerlink" title="4.简述Java垃圾回收机制"></a>4.简述Java垃圾回收机制</h3><p>在Java中，程序员不需要显示的释放一个对象的内存，而是由虚拟机自行执行。在JVM中，有一个垃圾回收线程，它是低优先级的，在正常情况下不会执行，只有在虚拟机空闲或者当前堆内存不足时，才会执行，扫描哪些没有被任何引用的对象，并将他们添加到要回收的集合中，进行回收。</p>
-<h3 id="5-如何打破双亲委派机制"><a href="#5-如何打破双亲委派机制" class="headerlink" title="5.如何打破双亲委派机制"></a>5.如何打破双亲委派机制</h3><h4 id="1-重写loadClass-方法"><a href="#1-重写loadClass-方法" class="headerlink" title="1.重写loadClass()方法"></a>1.重写loadClass()方法</h4><p>因为双亲委派机制的实现就是通过这个方法实现的，这个方法可以指定类通过什么加载器进行加载，所以如果我们改写了他的加载规则，就相当于打破了双亲委派机制。</p>
-<h3 id="6-为什么幸存区执行15次才会到老年区？"><a href="#6-为什么幸存区执行15次才会到老年区？" class="headerlink" title="6.为什么幸存区执行15次才会到老年区？"></a>6.为什么幸存区执行15次才会到老年区？</h3><p><img src="C:\Users\jxx\AppData\Roaming\Typora\typora-user-images\image-20210316095503016.png" alt="image-20210316095503016"></p>
-<p>因为对象头中Mark word中age就4位，所以最大为15.</p>
-<h3 id="7-类加载机制"><a href="#7-类加载机制" class="headerlink" title="7.类加载机制"></a>7.类加载机制</h3><p>作者：#半情调<br>链接：<a target="_blank" rel="noopener" href="https://www.nowcoder.com/discuss/621200?channel=-1&amp;source_id=discuss_terminal_discuss_sim_nctrack&amp;ncTraceId=cf18124817f240359ac0c296f3968041.2621.16170124135966917">https://www.nowcoder.com/discuss/621200?channel=-1&amp;source_id=discuss_terminal_discuss_sim_nctrack&amp;ncTraceId=cf18124817f240359ac0c296f3968041.2621.16170124135966917</a><br>来源：牛客网</p>
-<p>虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这就是虚拟机的类加载机制。  </p>
-<p>   类从被加载到虚拟机内存开始，到卸载出内存为止，它的整个生命周期包括：加载、验证、准备、解析、初始化、使用和卸载七个阶段。  </p>
-<p>   <img src="https://uploadfiles.nowcoder.com/files/20210323/4812884_1616468769575/v2-146fdc29d082f955fde70460689ebc29_b.png" alt="img">  </p>
-<h5 id="1-加载"><a href="#1-加载" class="headerlink" title="1.加载"></a>1.加载</h5><p>​    “加载”是”类加载”这个过程的一个阶段，是 “类加载”过程中最先开始进行的操作，加载阶段，虚拟机需要完成三件事：  </p>
-<ol>
-<li>​     <strong>根据类的全限定名获取定义此类的二进制字节流；</strong>   </li>
-<li>​     <strong>将这个字节流代表的静态存储结构转换为方法区的运行时数据结构；</strong>   </li>
-<li>​     <strong>在方法区中为这个类生成一个java.lang.Class对象，作为方法区这个类的访问入口。</strong>   </li>
-</ol>
-<h5 id="2-验证"><a href="#2-验证" class="headerlink" title="2.验证"></a>2.验证</h5><p>   验证是连接的第一步，这一阶段的目的是为了<strong>确保Class文件的字节流包含的信息符合当前虚拟机的要求，并且不会危害到虚拟机自身的安全</strong>。虚拟机如果不检查输入的字节流，对其完全信任的话，很可能会因为载入了有害字节流而导致系统崩溃。  </p>
-<p>   （1）文件格式验证  </p>
-<p>   检查字节流是否符合Class文件格式的规范，并且能被当前版本的虚拟机处理：  </p>
-<ul>
-<li><p>​    是否以魔数0XCAFEBABE开头。   </p>
-</li>
-<li><p>​    主、次版本号是否存在当前虚拟机处理范围内。   </p>
-</li>
-<li><p>​    常量池的常量是否有不被支持的常量类型。   </p>
-</li>
-<li><p>​    … …   </p>
-<p>（2）元数据验证  </p>
-<p>对字节码描述的信息进行语义分析，以保证其描述的信息符合Java语言规范的要求：  </p>
-</li>
-<li><p>​    这个类是否有父类。   </p>
-</li>
-<li><p>​    这个类的父类是否继承了不允许继承的类。   </p>
-</li>
-<li><p>​    如果这个类不是抽象类，是否实现了其父类或接口之中要求实现的所有方法。   </p>
-</li>
-<li><p>​    … …   </p>
-<p>（3）字节码验证  </p>
-<p>（4）符号引用验证  </p>
-</li>
-</ul>
-<h5 id="3-准备"><a href="#3-准备" class="headerlink" title="3.准备"></a>3.准备</h5><p>   准备阶段是<strong>正式为类变量分配内存并设置类变量初始值的阶段</strong>，这些变量所使用的内存都将在方法区中进行分配。  </p>
-<h5 id="4-解析"><a href="#4-解析" class="headerlink" title="4.解析"></a>4.解析</h5><p>   解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程。  </p>
-<h5 id="5-初始化"><a href="#5-初始化" class="headerlink" title="5.初始化"></a>5.初始化</h5><p>   前面的类加载过程中，除了在加载阶段用户应用程序可以通过自定义类加载器参与之外，其余动作完全由虚拟机主导和控制。到了初始化阶段，才真正开始执行类中定义的Java程序代码。  </p>
-<p>   虚拟机规范严格规定了有且只有5种情况必须立即对类进行“初始化”：  </p>
-<p>   （1）遇到new、getstatic、putstatic或invokestatic这4条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。生成这4条指令的最常见的Java代码场景是：使用new关键字实例化对象的时候、读取或设置一个类的静态字段的时候、调用一个类的静态方法的时候。  </p>
-<p>   （2）使用java.lang.reflect包的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。  </p>
-<p>   （3）当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类初始化。  </p>
-<p>   （4）当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的类），虚拟机会先初始化这个主类。  </p>
-<p>   （5）当使用JDK1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄，并且这个方法句柄所对应的类没有进行过初始化，则需要先触发初始化。  </p>
-<h5 id="6-类加载器双亲委派模型"><a href="#6-类加载器双亲委派模型" class="headerlink" title="6.类加载器双亲委派模型"></a>6.类加载器双亲委派模型</h5><p>   从Java虚拟机的角度来说，只存在两种不同的类加载器：一种是启动类加载器（Bootstrap ClassLoader），这个类加载器使用C++语言实现（HotSpot虚拟机中），是虚拟机自身的一部分；另一种就是所有其他的类加载器，这些类加载器都有Java语言实现，独立于虚拟机外部，并且全部继承自java.lang.ClassLoader。  </p>
-<p>   从开发者的角度，类加载器可以细分为：  </p>
-<p>   启动类加载器：负责将 Java_Home/lib下面的类库加载到内存中（比如rt.jar）。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作。  </p>
-<p>   扩展类加载器：由sun.misc.Launcher$ExtClassLoader实现。它负责将Java_Home /lib/ext或者由系统变量 java.ext.dir指定位置中的类库加载到内存中。开发者可以直接使用标准扩展类加载器。  </p>
-<p>   应用程序类加载器：由 sun.misc.Launcher$AppClassLoader实现的。它负责将系统类路径（CLASSPATH）中指定的类库加载到内存中。开发者可以直接使用这个类加载器。  </p>
-<p>   除此之外，还有自定义的类加载器，它们之间的层次关系被称为类加载器的双亲委派模型。该模型要求除了顶层的启动类加载器外，其余的类加载器都应该有自己的父类加载器，而这种父子关系一般通过组合（Composition）关系来实现，而不是通过继承（Inheritance）。  </p>
-<p>   <img src="https://uploadfiles.nowcoder.com/files/20210323/4812884_1616468769673/v2-b4fb2a1d31933e22ccd2d22a70b2fec0_b.png" alt="img">  </p>
-<p>   双亲委派模型的工作原理是，如果一个类加载器收到了类加载请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去执行，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求时，子加载器才会尝试自己去加载。  </p>
-<p>   优势：  </p>
-<p>   （1）采用双亲委派模式的是好处是Java类随着它的类加载器一起具备了一种  <strong>带有优先级的层次关系</strong>  ，通过这种层级关可以  <strong>避免类的重复加载</strong>  ，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。  </p>
-<p>   （2）实现简单，逻辑清晰易懂。</p>
-<h3 id="8-JAVA中四种引用的区别"><a href="#8-JAVA中四种引用的区别" class="headerlink" title="8.JAVA中四种引用的区别"></a>8.JAVA中四种引用的区别</h3><ol>
-<li>强引用:如果一个对象具有强引用，则它不会被垃圾回收器回收。即使当前内存不足，JVM也不会回收它，而是抛出OutOfMemoryError错误，使得程序终止。如果想中断断强引用和某个对象之间的关联，可以显示地将引用赋值为null，这样JVM就在合适的时间回收该对象。</li>
-<li>软引用：具有软引用的对象，如果内存的空间充足，则该对象能够继续被使用，而不会被垃圾回收器回收，只有在内存不足时，弱引用才会被垃圾回收器回收。</li>
-<li>弱引用：具有弱引用的对象，当JVM进行垃圾回收，一旦发现弱引用对象，无论当前内存空间是否充足，都会将弱引用回收。</li>
-<li>虚引用：如果一个对象仅持有虚引用，那么它相当于没有引用，在任何时候都可能被垃圾回收器回收。</li>
-</ol>
-<h3 id="9-JVM如何判断哪些对象可以被回收"><a href="#9-JVM如何判断哪些对象可以被回收" class="headerlink" title="9.JVM如何判断哪些对象可以被回收"></a>9.JVM如何判断哪些对象可以被回收</h3><ol>
-<li><p><strong>引用计数器算法</strong>：给对象添加一个引用计数器，每当有一个地方引用它时，计数器的值就加1；当引用失效时，计数器就会减1，在任何时刻计数器的值为0的对象就是不可能再被使用的，也就是被回收的对象。引用计数器算法效率高，但是主流的JVM并没有采用这种算法来判断可回收对象，因为它有一个致命的缺陷，就是无法解决对象之间循环引用的问题，对于循环引用的对象，无法进行回收。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Object</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> Object instance;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 1</span></span><br><span class="line">        Object objectA = <span class="keyword">new</span> Object();</span><br><span class="line">        Object objectB = <span class="keyword">new</span> Object();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2</span></span><br><span class="line">        objectA.instance = objectB;</span><br><span class="line">        objectB.instance = objectA;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3</span></span><br><span class="line">        objectA = <span class="keyword">null</span>;</span><br><span class="line">        objectB = <span class="keyword">null</span>;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>程序启动之后，objectA和objectB两个对象被创建并在堆中分配内存，虽然他们被置为null,但他们相互引用，也就是说引用计数器的值并不为0，然而事实上，这两个对象已经不可能在2被访问，应该被回收。因此，引用计数器算法就无法告知GC收集器回收他们。</p>
-</li>
-<li><p><strong>可达性分析算法</strong></p>
-</li>
-</ol>
-<p>在主流的JVM中，都是通过可达性分析算法来判断对象是否存活的。其基本思想：通过一系列被称为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索走过的路径称为引用链，当一个对象与GC Roots对象没有任何引用链相连时，就认为GC Roots到这个对象是不可达的，判定为不可用对象，可以被回收。</p>
-<p><img src="https://img-blog.csdn.net/20180228154655527?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzY3OTU0NzQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="img"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/17/JVM%E6%80%BB%E7%BB%93/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-哈希-两个数组的交集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/">哈希-两个数组的交集</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/" class="archive-article-date">
-  	<time datetime="2021-04-17T12:47:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定两个数组，编写一个函数来计算它们的交集。</p>
-<p>示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]</span><br><span class="line">输出：[2]</span><br></pre></td></tr></table></figure>
-<p>示例 2：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]</span><br><span class="line">输出：[9,4]</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>1.首先利用set集合存放数组nums1中的值，</p>
-<p>2.然后遍历nums2，如果nums2[i]在set中，且不出现在set1中，则将nums2[i]放入set1中</p>
-<p>3.遍历将set1转化为数组并输出</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] intersection(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2) &#123;</span><br><span class="line">        <span class="keyword">int</span> len1=nums1.length;</span><br><span class="line">        <span class="keyword">int</span> len2=nums2.length;</span><br><span class="line">        <span class="keyword">int</span> len=Math.max(len1,len2);</span><br><span class="line">        <span class="keyword">int</span> k=<span class="number">0</span>;</span><br><span class="line">        Set set=<span class="keyword">new</span> HashSet();</span><br><span class="line">        Set set1=<span class="keyword">new</span> HashSet();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums1.length;i++)&#123;</span><br><span class="line">            set.add(nums1[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums2.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(set.contains(nums2[i]) &amp;&amp; !(set1.contains(nums2[i])))&#123;</span><br><span class="line">                set1.add(nums2[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//遍历set1中的元素</span></span><br><span class="line">        Object[] temp=set1.toArray();</span><br><span class="line">        <span class="keyword">int</span>[] res=<span class="keyword">new</span> <span class="keyword">int</span>[temp.length];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;temp.length;i++)&#123;</span><br><span class="line">            res[i]=(<span class="keyword">int</span>)temp[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-哈希-有效的字母异位词" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/">哈希-有效的字母异位词</a>
-    </h1>
-  
-
-        
-        <a href="/2021/04/17/%E5%93%88%E5%B8%8C-%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/" class="archive-article-date">
-  	<time datetime="2021-04-17T11:40:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定两个字符串 <em>s</em> 和 <em>t</em> ，编写一个函数来判断 <em>t</em> 是否是 <em>s</em> 的字母异位词。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: s &#x3D; &quot;anagram&quot;, t &#x3D; &quot;nagaram&quot;</span><br><span class="line">输出: true</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: s &#x3D; &quot;rat&quot;, t &#x3D; &quot;car&quot;</span><br><span class="line">输出: false</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>这题说白了就是找两个字符串中各字符的个数是否相等。</p>
-<p>数组其实就是一个简单的哈希表，而且这道题目中字符串只有小写字符，那么就可以定义一个数组来记录字符串中各字符出现的个数。</p>
-<p>在遍历字符串s时，每个字符出现一次，让其在对应数组中数值加1，</p>
-<p>在遍历字符串t时，每个字符出现一次，让其在对应数组中数值减1</p>
-<p>对应数组下标就时s.charAt(i)-‘a’</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isAnagram</span><span class="params">(String s, String t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span>[] arr=<span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">26</span>];<span class="comment">//定义长度位26的数组</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;s.length();i++)&#123;</span><br><span class="line">            arr[s.charAt(i)-<span class="string">&#x27;a&#x27;</span>]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;t.length();i++)&#123;</span><br><span class="line">            arr[t.charAt(i)-<span class="string">&#x27;a&#x27;</span>]--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;arr.length;i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(arr[i]!=<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E6%9C%89%E6%95%88%E7%9A%84%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/">Next &amp;raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -1061,8 +331,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
