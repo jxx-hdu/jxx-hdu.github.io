@@ -176,7 +176,7 @@
 <p>其中count+=len不是一个原子操作，当两个线程同时执行count+=len时，两个线程执行完后count值加1，而不是加2，所以这就是为什么输出值要小于预期值。</p>
 <h3 id="3-为什么StringBuffer线程安全"><a href="#3-为什么StringBuffer线程安全" class="headerlink" title="3.为什么StringBuffer线程安全"></a>3.为什么StringBuffer线程安全</h3><p>把StringBuilder换成StringBuffer就是线程安全的。因为StringBuffer中append方法加了synchorized关键字</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> StringBuffer <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    toStringCache = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">super</span>.append(str);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+
       
 
       
