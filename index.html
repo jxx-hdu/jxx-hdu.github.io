@@ -143,6 +143,124 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-kafka总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/08/22/kafka%E6%80%BB%E7%BB%93/">kafka总结</a>
+    </h1>
+  
+
+        
+        <a href="/2021/08/22/kafka%E6%80%BB%E7%BB%93/" class="archive-article-date">
+  	<time datetime="2021-08-22T02:01:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-消息队列通信的模式"><a href="#1-消息队列通信的模式" class="headerlink" title="1.消息队列通信的模式"></a>1.消息队列通信的模式</h3><ul>
+<li>点对点模式</li>
+</ul>
+<p><img src="../images/kafka%E6%80%BB%E7%BB%93/WeChat%20Screenshot_20190325215138.png" alt="img"></p>
+<p>​        点对点模式需要额外的线程取监控消息队列中是否有消息需要消费</p>
+<ul>
+<li>发布订阅模式</li>
+</ul>
+<p><img src="../images/kafka%E6%80%BB%E7%BB%93/WeChat%20Screenshot_20190325215154.png" alt="img"></p>
+<p>​        这种模式下，生产者将消息放入消息队列后，队列会将消息推送给订阅过该类信息的消费者。由于是消费者被动接收推送，所以无需感知消息队列是否有待消费的信息。但是由于消费者处理消息的速度不同，所以推送的速度成了发布订阅模式的一个问题。</p>
+<h3 id="2-Kafka简介"><a href="#2-Kafka简介" class="headerlink" title="2.Kafka简介"></a>2.Kafka简介</h3><h4 id="2-1-什么是Kafka"><a href="#2-1-什么是Kafka" class="headerlink" title="2.1 什么是Kafka?"></a>2.1 什么是Kafka?</h4><p>​        kafka是由Apacha开发的一种发布订阅消息系统，它是一个分布式的、分区和可复制的提交日志服务。</p>
+<h4 id="2-2使用场景"><a href="#2-2使用场景" class="headerlink" title="2.2使用场景"></a>2.2使用场景</h4><p>异步处理</p>
+<p>应用解耦</p>
+<p>消息通讯等</p>
+<h4 id="2-3优点和缺点"><a href="#2-3优点和缺点" class="headerlink" title="2.3优点和缺点"></a>2.3优点和缺点</h4><p><strong>优点：</strong></p>
+<ul>
+<li>支持消息复制</li>
+<li>可用性高：一个数据多个副本，少数机器宕机，不会丢书数据</li>
+<li>消息可靠性：可以通过配置参数，使得消息0丢失</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>由于是批量发送，数据并非真正的实时，且只能保证同一分区内的消息有序，无法实现全局消息有序。</li>
+<li>依赖zookeeper进行元数据管理等</li>
+</ul>
+<h4 id="2-4-Kafka相对传统技术有什么优势"><a href="#2-4-Kafka相对传统技术有什么优势" class="headerlink" title="2.4 Kafka相对传统技术有什么优势"></a>2.4 Kafka相对传统技术有什么优势</h4><p>1.快速：单一的Kafka可以处理成千上万的客户端，每秒处理数兆字节的读写操作</p>
+<p>2.持久：在集群中进行复制，以防止数据的丢失</p>
+<h3 id="3-Kafka的基础架构及术语"><a href="#3-Kafka的基础架构及术语" class="headerlink" title="3.Kafka的基础架构及术语"></a>3.Kafka的基础架构及术语</h3><p>基础架构</p>
+<p><img src="../images/kafka%E6%80%BB%E7%BB%93/WeChat%20Screenshot_20190325215237.png" alt="img"></p>
+<p><strong>Producer</strong>:即生产者</p>
+<p><strong>Broker</strong>:Broker是kafka的实例，每个服务器上有一个或多个kafka的实例，我们可以认为每个broker对应一台服务器。每个kafka集群内的broker都有一个不重复的编号。</p>
+<p><strong>Topic</strong>：消息的主题，可以理解为消息的分类，kafka的数据就保存在topic。在每个broker上都可以创建多个topic。</p>
+<p><strong>Partition</strong>：Topic的分区，每个topic可以有多个分区，分区的作用是做负载，提高kafka的吞吐量。同一个topic在不同的分区的数据是不重复的，partition的表现形式就是一个一个的文件夹！</p>
+<p><strong>Replication</strong>:每一个分区都有多个副本，副本的作用是做备胎。当主分区（Leader）故障的时候会选择一个备胎（Follower）上位，成为Leader。在kafka中默认副本的最大数量是10个，且副本的数量不能大于Broker的数量，follower和leader绝对是在不同的机器，同一机器对同一个分区也只可能存放一个副本（包括自己）。<br><strong>Message</strong>：每一条发送的消息主体。</p>
+<p><strong>Consumer</strong>：消费者，即消息的消费方，是消息的出口。<br><strong>Consumer Group</strong>：我们可以将多个消费组组成一个消费者组，在kafka的设计中同一个分区的数据只能被消费者组中的某一个消费者消费。同一个消费者组的消费者可以消费同一个topic的不同分区的数据，这也是为了提高kafka的吞吐量！<br><strong>Zookeeper</strong>：kafka集群依赖zookeeper来保存集群的的元信息，来保证系统的可用性。主要用于集群中不同节点之间进行通信、leader检测、分布式同步等。</p>
+<h3 id="4-工作流程分析"><a href="#4-工作流程分析" class="headerlink" title="4.工作流程分析"></a>4.工作流程分析</h3><p><img src="../images/kafka%E6%80%BB%E7%BB%93/WeChat%20Screenshot_20190325215252.png" alt="img"></p>
+<p>需要注意的一点是，消息写入leader后，follower是主动的去leader进行同步的！producer采用push模式将数据发布到broker，每条消息追加到分区中，顺序写入磁盘，所以保证<strong>同一分区</strong>内的数据是有序的！写入示意图如下：</p>
+<p><img src="../images/kafka%E6%80%BB%E7%BB%93/WeChat%20Screenshot_20190325215312.png" alt="img"></p>
+<p>上面说到数据会写入到不同的分区，那kafka为什么要做分区呢？相信大家应该也能猜到，分区的主要目的是：<br>　　<strong>1、 方便扩展</strong>。因为一个topic可以有多个partition，所以我们可以通过扩展机器去轻松的应对日益增长的数据量。<br>　　<strong>2、 提高并发</strong>。以partition为读写单位，可以多个消费者同时消费数据，提高了消息的处理效率。</p>
+<p>　　熟悉负载均衡的朋友应该知道，当我们向某个服务器发送请求的时候，服务端可能会对请求做一个负载，将流量分发到不同的服务器，那在kafka中，如果某个topic有多个partition，producer又怎么知道该将数据发往哪个partition呢？kafka中有几个原则：<br>　　1、 partition在写入的时候可以指定需要写入的partition，如果有指定，则写入对应的partition。<br>　　2、 如果没有指定partition，但是设置了数据的key，则会根据key的值hash出一个partition。<br>　　3、 如果既没指定partition，又没有设置key，则会轮询选出一个partition。</p>
+<p>保证消息不丢失是一个消息队列中间件的基本保证，那producer在向kafka写入消息的时候，怎么保证消息不丢失呢？其实上面的写入流程图中有描述出来，那就是通过ACK应答机制！在生产者向队列写入数据的时候可以设置参数来确定是否确认kafka接收到数据，这个参数可设置的值为<strong>0</strong>、<strong>1</strong>、<strong>all</strong>。<br>　　0代表producer往集群发送数据不需要等到集群的返回，不确保消息发送成功。安全性最低但是效率最高。<br>　　1代表producer往集群发送数据只要leader应答就可以发送下一条，只确保leader发送成功。<br>　　all代表producer往集群发送数据需要所有的follower都完成从leader的同步才会发送下一条，确保leader发送成功和所有的副本都完成备份。安全性最高，但是效率最低。</p>
+<p>最后要注意的是，如果往不存在的topic写数据，能不能写入成功呢？kafka会自动创建topic，分区和副本的数量根据默认配置都是1。</p>
+<h3 id="5-保存数据"><a href="#5-保存数据" class="headerlink" title="5.保存数据"></a>5.保存数据</h3><p>　　Producer将数据写入kafka后，集群就需要对数据进行保存了！kafka将数据保存在磁盘，可能在我们的一般的认知里，写入磁盘是比较耗时的操作，不适合这种高并发的组件。Kafka初始会单独开辟一块磁盘空间，顺序写入数据（效率比随机写入高）。</p>
+<p><strong>Partition 结构</strong><br>　　前面说过了每个topic都可以分为一个或多个partition，如果你觉得topic比较抽象，那partition就是比较具体的东西了！Partition在服务器上的表现形式就是一个一个的文件夹，每个partition的文件夹下面会有多组segment文件，每组segment文件又包含.index文件、.log文件、.timeindex文件（早期版本中没有）三个文件， log文件就实际是存储message的地方，而index和timeindex文件为索引文件，用于检索消息。</p>
+<p>　　<img src="../images/kafka%E6%80%BB%E7%BB%93/WeChat%20Screenshot_20190325215337.png" alt="img"></p>
+<p>　　如上图，这个partition有三组segment文件，每个log文件的大小是一样的，但是存储的message数量是不一定相等的（每条的message大小不一致）。文件的命名是以该segment最小offset来命名的，如000.index存储offset为0~368795的消息，kafka就是利用分段+索引的方式来解决查找效率的问题。</p>
+<p><strong>Message结构</strong><br>上面说到log文件就实际是存储message的地方，我们在producer往kafka写入的也是一条一条的message，那存储在log中的message是什么样子的呢？消息主要包含消息体、消息大小、offset、压缩类型……等等！我们重点需要知道的是下面三个：<br>　　1、 offset：offset是一个占8byte的有序id号，它可以唯一确定每条消息在parition内的位置！<br>　　2、 消息大小：消息大小占用4byte，用于描述消息的大小。<br>　　3、 消息体：消息体存放的是实际的消息数据（被压缩过），占用的空间根据具体的消息而不一样。</p>
+<p><strong>存储策略</strong><br>　　无论消息是否被消费，kafka都会保存所有的消息。那对于旧数据有什么删除策略呢？<br>　　1、 基于时间，默认配置是168小时（7天）。<br>　　2、 基于大小，默认配置是1073741824。<br>　　需要注意的是，kafka读取特定消息的时间复杂度是O(1)，所以这里删除过期的文件并不会提高kafka的性能！</p>
+<h3 id="6-消费数据"><a href="#6-消费数据" class="headerlink" title="6.消费数据"></a>6.消费数据</h3><p>　　消息存储在log文件后，消费者就可以进行消费了。与生产消息相同的是，消费者在拉取消息的时候也是<strong>找leader</strong>去拉取。</p>
+<p>　　多个消费者可以组成一个消费者组（consumer group），每个消费者组都有一个组id！同一个消费组者的消费者可以消费同一topic下不同分区的数据，但是不会组内多个消费者消费同一分区的数据！！！是不是有点绕。我们看下图：</p>
+<p>　　<img src="../images/kafka%E6%80%BB%E7%BB%93/WeChat%20Screenshot_20190325215326.png" alt="img"></p>
+<p>　　图示是消费者组内的消费者小于partition数量的情况，所以会出现某个消费者消费多个partition数据的情况，消费的速度也就不及只处理一个partition的消费者的处理速度！如果是消费者组的消费者多于partition的数量，那会不会出现多个消费者消费同一个partition的数据呢？上面已经提到过不会出现这种情况！多出来的消费者不消费任何partition的数据。所以在实际的应用中，建议<strong>消费者组的consumer的数量与partition的数量一致</strong>！<br>　　在保存数据的小节里面，我们聊到了partition划分为多组segment，每个segment又包含.log、.index、.timeindex文件，存放的每条message包含offset、消息大小、消息体……我们多次提到segment和offset，查找消息的时候是怎么利用segment+offset配合查找的呢？假如现在需要查找一个offset为368801的message是什么样的过程呢？我们先看看下面的图：</p>
+<p><img src="../images/kafka%E6%80%BB%E7%BB%93/WeChat%20Screenshot_20190325215338.png" alt="img"></p>
+<p>　　1、 先找到offset的368801message所在的segment文件（利用二分法查找），这里找到的就是在第二个segment文件。<br>　　2、 打开找到的segment中的.index文件（也就是368796.index文件，该文件起始偏移量为368796+1，我们要查找的offset为368801的message在该index内的偏移量为368796+5=368801，所以这里要查找的<strong>相对offset</strong>为5）。由于该文件采用的是稀疏索引的方式存储着相对offset及对应message物理偏移量的关系，所以直接找相对offset为5的索引找不到，这里同样利用二分法查找相对offset小于或者等于指定的相对offset的索引条目中最大的那个相对offset，所以找到的是相对offset为4的这个索引。<br>　　3、 根据找到的相对offset为4的索引确定message存储的物理偏移位置为256。打开数据文件，从位置为256的那个地方开始顺序扫描直到找到offset为368801的那条Message。</p>
+<p>　　这套机制是建立在offset为有序的基础上，利用<strong>segment</strong>+<strong>有序offset</strong>+<strong>稀疏索引</strong>+<strong>二分查找</strong>+<strong>顺序查找</strong>等多种手段来高效的查找数据！至此，消费者就能拿到需要处理的数据进行处理了。那每个消费者又是怎么记录自己消费的位置呢？在早期的版本中，消费者将消费到的offset维护zookeeper中，consumer每间隔一段时间上报一次，这里容易导致重复消费，且性能不好！在新的版本中消费者消费到的offset已经直接维护在kafk集群的__consumer_offsets这个topic中！</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/sujing/p/10960832.html">https://www.cnblogs.com/sujing/p/10960832.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/22/kafka%E6%80%BB%E7%BB%93/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Redis中的事务" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -767,84 +885,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/05/18/%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-二叉树-对称二叉树" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/18/%E4%BA%8C%E5%8F%89%E6%A0%91-%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91/">二叉树-对称二叉树</a>
-    </h1>
-  
-
-        
-        <a href="/2021/05/18/%E4%BA%8C%E5%8F%89%E6%A0%91-%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91/" class="archive-article-date">
-  	<time datetime="2021-05-18T02:23:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定一个二叉树，检查它是否是镜像对称的。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">例如，二叉树 [<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">4</span>,<span class="number">3</span>] 是对称的。</span><br><span class="line">	<span class="number">1</span></span><br><span class="line">   / \</span><br><span class="line">  <span class="number">2</span>   <span class="number">2</span></span><br><span class="line"> / \ / \</span><br><span class="line"><span class="number">3</span>  <span class="number">4</span> <span class="number">4</span>  <span class="number">3</span></span><br><span class="line">但是下面这个 [<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="keyword">null</span>,<span class="number">3</span>,<span class="keyword">null</span>,<span class="number">3</span>] 则不是镜像对称的:</span><br><span class="line"> <span class="number">1</span></span><br><span class="line">   / \</span><br><span class="line">  <span class="number">2</span>   <span class="number">2</span></span><br><span class="line">   \   \</span><br><span class="line">   <span class="number">3</span>    <span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>1.递归法</p>
-<p>递归三部曲</p>
-<ul>
-<li>确定递归函数的参数和返回值：因为我们要判断是否是对称的，因此返回值为boolean类型</li>
-<li>确定终止条件：要比较两个节点数值是否相等，首先要讨论两个节点为空的情况</li>
-<li>单层递归逻辑：<ul>
-<li><input disabled="" type="checkbox"> 比较二叉树外侧是否对称：传入的是left.left和right.right</li>
-<li><input disabled="" type="checkbox"> 比较内测是否相等，比较的是left.right与right.left</li>
-<li><input disabled="" type="checkbox"> 如果以上两者都返回true,则整体返回true，否则返回false</li>
-</ul>
-</li>
-</ul>
-<p>2.迭代法</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line">递归法</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val, TreeNode left, TreeNode right) &#123;</span></span><br><span class="line"><span class="comment"> *         this.val = val;</span></span><br><span class="line"><span class="comment"> *         this.left = left;</span></span><br><span class="line"><span class="comment"> *         this.right = right;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSymmetric</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//递归</span></span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> help(root.left,root.right);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">help</span><span class="params">(TreeNode left,TreeNode right)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(left==<span class="keyword">null</span> &amp;&amp; right==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//疑问？为什么不能直接简化为if(left!=right)</span></span><br><span class="line">        <span class="keyword">if</span>((left==<span class="keyword">null</span> || right==<span class="keyword">null</span>) || left.val !=right.val)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//为什么不能直接比节点？</span></span><br><span class="line">        <span class="comment">// if(left!=right)&#123;</span></span><br><span class="line">        <span class="comment">//     return false;</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> help(left.left,right.right) &amp;&amp; help(left.right,right.left);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//迭代法</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val, TreeNode left, TreeNode right) &#123;</span></span><br><span class="line"><span class="comment"> *         this.val = val;</span></span><br><span class="line"><span class="comment"> *         this.left = left;</span></span><br><span class="line"><span class="comment"> *         this.right = right;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSymmetric</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        Stack&lt;TreeNode&gt; stack=<span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//不能这样做</span></span><br><span class="line">        <span class="comment">// if(root.left!=root.right)&#123;</span></span><br><span class="line">        <span class="comment">//     return false;</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">        <span class="comment">// if(root.left!=null)&#123;</span></span><br><span class="line">        <span class="comment">//     stack.push(root.left);</span></span><br><span class="line">        <span class="comment">//     stack.push(root.right);</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">        stack.push(root.left);</span><br><span class="line">        stack.push(root.right);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(!stack.isEmpty())&#123;</span><br><span class="line">            TreeNode node1=stack.pop();</span><br><span class="line">            TreeNode node2=stack.pop();</span><br><span class="line">            <span class="comment">//不能直接判断节点是否相等</span></span><br><span class="line">            <span class="comment">// if(node1.left!=node2.right || node1.right!=node2.left)&#123;</span></span><br><span class="line">            <span class="comment">//     return false;</span></span><br><span class="line">            <span class="comment">// &#125;</span></span><br><span class="line">            <span class="comment">// if(node1.left!=null)&#123;</span></span><br><span class="line">            <span class="comment">//     stack.push(node1.left);</span></span><br><span class="line">            <span class="comment">//     stack.push(node2.right);</span></span><br><span class="line">            <span class="comment">// &#125;</span></span><br><span class="line">            <span class="comment">// if(node1.right!=null)&#123;</span></span><br><span class="line">            <span class="comment">//     stack.push(node1.right);</span></span><br><span class="line">            <span class="comment">//     stack.push(node2.left);</span></span><br><span class="line">            <span class="comment">// &#125;</span></span><br><span class="line">            <span class="keyword">if</span>(node1==<span class="keyword">null</span> &amp;&amp; node2==<span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(node1==<span class="keyword">null</span> || node2==<span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(node1.val!=node2.val)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            stack.push(node1.left);</span><br><span class="line">            stack.push(node2.right);</span><br><span class="line">            stack.push(node1.right);</span><br><span class="line">            stack.push(node2.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/05/18/%E4%BA%8C%E5%8F%89%E6%A0%91-%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91/">展开全文 >></a>
         </p>
       
 

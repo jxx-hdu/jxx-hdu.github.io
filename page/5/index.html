@@ -143,6 +143,77 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-哈希-两个数组的交集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/">哈希-两个数组的交集</a>
+    </h1>
+  
+
+        
+        <a href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/" class="archive-article-date">
+  	<time datetime="2021-04-17T12:47:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定两个数组，编写一个函数来计算它们的交集。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums1 &#x3D; [1,2,2,1], nums2 &#x3D; [2,2]</span><br><span class="line">输出：[2]</span><br></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums1 &#x3D; [4,9,5], nums2 &#x3D; [9,4,9,8,4]</span><br><span class="line">输出：[9,4]</span><br></pre></td></tr></table></figure>
+<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>1.首先利用set集合存放数组nums1中的值，</p>
+<p>2.然后遍历nums2，如果nums2[i]在set中，且不出现在set1中，则将nums2[i]放入set1中</p>
+<p>3.遍历将set1转化为数组并输出</p>
+<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] intersection(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2) &#123;</span><br><span class="line">        <span class="keyword">int</span> len1=nums1.length;</span><br><span class="line">        <span class="keyword">int</span> len2=nums2.length;</span><br><span class="line">        <span class="keyword">int</span> len=Math.max(len1,len2);</span><br><span class="line">        <span class="keyword">int</span> k=<span class="number">0</span>;</span><br><span class="line">        Set set=<span class="keyword">new</span> HashSet();</span><br><span class="line">        Set set1=<span class="keyword">new</span> HashSet();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums1.length;i++)&#123;</span><br><span class="line">            set.add(nums1[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums2.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(set.contains(nums2[i]) &amp;&amp; !(set1.contains(nums2[i])))&#123;</span><br><span class="line">                set1.add(nums2[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//遍历set1中的元素</span></span><br><span class="line">        Object[] temp=set1.toArray();</span><br><span class="line">        <span class="keyword">int</span>[] res=<span class="keyword">new</span> <span class="keyword">int</span>[temp.length];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;temp.length;i++)&#123;</span><br><span class="line">            res[i]=(<span class="keyword">int</span>)temp[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/04/17/%E5%93%88%E5%B8%8C-%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-哈希-有效的字母异位词" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -705,70 +776,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/03/02/JVM/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-spring面试" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/02/spring%E9%9D%A2%E8%AF%95/">Spring面试</a>
-    </h1>
-  
-
-        
-        <a href="/2021/03/02/spring%E9%9D%A2%E8%AF%95/" class="archive-article-date">
-  	<time datetime="2021-03-02T11:19:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-解释一下spring-bean的生命周期"><a href="#1-解释一下spring-bean的生命周期" class="headerlink" title="1.解释一下spring bean的生命周期"></a>1.解释一下spring bean的生命周期</h2><p>1.解析类得到BeanDefinition<br>2.如果有多个构造方法，则要推断构造方法<br>3.确定好构造方法后，进行实例化得到一个对象<br>4.对对象中加了@Autowired注解的属性进行填充<br>5.调用afterPropertiesSet()方法，该方法可以对没有加注解的属性进行注入<br>6.调用初始化方法<br>7.调用初始化后的方法，这里会进行AOP<br>9.如果当前创建的bean是单例bean，会把bean放入单例池<br>10.使用bean<br>11.Spring容器关闭时调用DisposableBean中destory()方法  </p>
-<h2 id="2-依赖注入-Autowired与-Resource的区别"><a href="#2-依赖注入-Autowired与-Resource的区别" class="headerlink" title="2.依赖注入@Autowired与@Resource的区别"></a>2.依赖注入@Autowired与@Resource的区别</h2><p>1.@Autowired<br>首先根据类型进行注入，如果根据类型在Spring中找到多个Bean,然后根据是不是符合Qualifier、优先级等进行进一步确认，最后在根据属性名确认。<br>2.@Resource<br>如果@Resource注解指定name属性，则直接从Spring容器中拿对应的Bean，如果不存在则表示没有找到注入对象，然后根据属性名字或setxxx中的xxx在Spring容器中找对应的Bean</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/02/spring%E9%9D%A2%E8%AF%95/">展开全文 >></a>
         </p>
       
 
