@@ -143,6 +143,91 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-垃圾回收器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/08/26/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">垃圾回收器</a>
+    </h1>
+  
+
+        
+        <a href="/2021/08/26/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/" class="archive-article-date">
+  	<time datetime="2021-08-26T13:12:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-CMS垃圾回收器"><a href="#1-CMS垃圾回收器" class="headerlink" title="1.CMS垃圾回收器"></a>1.CMS垃圾回收器</h3><h4 id="1-1CMS的回收过程"><a href="#1-1CMS的回收过程" class="headerlink" title="1.1CMS的回收过程"></a>1.1CMS的回收过程</h4><p>CMS收集器是一种以获取最短回收停顿时间为目标的收集器。它在垃圾收集时使得用户线程和GC线程并发执行，因此在垃圾回收过程中用户不会感到明显的卡顿。</p>
+<p>CMS收集器是基于“标记-清除”算法实现的，它的运作工程大致可以分为以下4个步骤：</p>
+<ol>
+<li><strong>初始标记</strong>：主要是标记GC Root开始的下一级对象，这个过程会有停顿，由于和GC Root直接关联的对象不是很多，因此这个过程很快。</li>
+<li><strong>并发标记</strong>：根据上一步的结果，继续向下标识所有关联的对象，直到这条链的尽头，这个过程中是多线程的，虽然耗时理论上会比较长，但其它工作线程并不会阻塞，没有停顿。</li>
+<li><strong>重新标记</strong>：由于第2步中并没有阻塞其他线程，使得会产生新的垃圾。</li>
+<li><strong>并发清除</strong>：清理掉标记阶段判断为已经死亡的对象，这个过程可以与用户线程并发进行。</li>
+</ol>
+<h4 id="1-2CMS的缺点"><a href="#1-2CMS的缺点" class="headerlink" title="1.2CMS的缺点"></a>1.2CMS的缺点</h4><ol>
+<li>并发回收导致CPU资源紧张：在并发阶段，它虽然不会导致用户线程停顿，但是会因为占用一部分CPU资源导致应用程序变慢。</li>
+<li>无法清理浮动垃圾：在CMS的并发标记和并发清除过程中，用户线程还在继续运行，就会伴随着新的垃圾对象不断产生，但这一部分垃圾对象是出现在标记过程结束之后，CMS无法在本次收集中处理掉它们，只好留在下次清理。</li>
+<li>内存碎片问题：CMS基于“标记清除”算法，难免会产生内存碎片。内存碎片过多，将会给大对象分配带来麻烦，往往会出现老年代还有很多剩余空间，但就是无法找到足够大的连续空间来分配给当前对象，导致触发一次Full GC的情况。</li>
+</ol>
+<h3 id="2-G1垃圾回收器"><a href="#2-G1垃圾回收器" class="headerlink" title="2.G1垃圾回收器"></a>2.G1垃圾回收器</h3><h4 id="2-1G1的优势："><a href="#2-1G1的优势：" class="headerlink" title="2.1G1的优势："></a>2.1G1的优势：</h4><p>G1从整体上看是基于标记-整理算法实现的回收器，但从局部（两个Region之间）上看又是基于标记-复制算法实现的。但无论如何，这两种算法都意味着G1运作期间不会产生内存碎片。</p>
+<p>在G1之前的其他收集器进行收集的范围都是整个新生代或老年代，而G1不再是这样，使用G1收集器时，Java堆的内存布局就与其他收集器有很大差别，它将整个Java堆划分为多个大小相等的独立区域（Region）,新生代和老年代不再是物理隔离的了，他们都是一部分Region的集合。</p>
+<p>G1可以跟踪各个Region里面的垃圾堆积的价值大小，在后台维护一个优先列表，每次根据允许的收集时间，优先回收价值最大的Region。这样保证了G1收集器在有限的时间内可以获取尽可能大的收集效率。</p>
+<h4 id="2-2G1的回收过程"><a href="#2-2G1的回收过程" class="headerlink" title="2.2G1的回收过程"></a>2.2G1的回收过程</h4><p>G1的回收过程可以分为以下4个步骤：</p>
+<ol>
+<li><strong>初始标记</strong>（会停顿）：只标记与GC Root直接关联的对象，并且修改TAMS指针的值，让下一阶段用户线程并发运行时，能正确地在可用的Region中分配新对象。这个阶段需要停顿线程，但耗时很短，而且是借用进行Minor GC的时候同步完成的，所以G1收集器在这个阶段实际并没有额外的停顿。</li>
+<li><strong>并发标记</strong>：从GC Roots开始对堆中对象进行可达性分析，找出要回收的对象，这阶段耗时较长，但可与用户程序并发执行。</li>
+<li><strong>最终标记</strong>（会停顿）：对用户线程做短暂的暂停，处理并发阶段结束后仍有引用变动的对象。</li>
+<li><strong>清理阶段</strong>（会停顿）：更新Region的统计数据，对各个Region的回收价值和成本进行排序，根据用户所期望的停顿时间来制定回收计划，可以自由选择任意多个Region构成回收集，然后把决定回收的那一部分Region的存活对象复制到空的Region中，再清理掉整个旧Region的全部空间。这里的操作涉及存活对象的移动，必须暂停用户线程，由多条回收器线程并行完成的。</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/26/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-排序算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -864,75 +949,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/05/22/%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%8A%82%E7%82%B9%E4%B8%AA%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-二叉树-二叉树的最小深度" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/19/%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/">二叉树-二叉树的最小深度</a>
-    </h1>
-  
-
-        
-        <a href="/2021/05/19/%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/" class="archive-article-date">
-  	<time datetime="2021-05-19T00:31:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>给定一个二叉树，找出其最小深度。</p>
-<p>最小深度是从根节点到最近叶子节点的最短路径上的节点数量。</p>
-<p><strong>说明：</strong>叶子节点是指没有子节点的节点。</p>
-<p><img src="../images/%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/ex_depth.jpg" alt="img"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：root = [<span class="number">3</span>,<span class="number">9</span>,<span class="number">20</span>,<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="number">15</span>,<span class="number">7</span>]</span><br><span class="line">输出：<span class="number">2</span></span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>方法1：层序遍历：当遍历到某一层中出现了左右孩子都为空的情况时，则返回</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">迭代法</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val, TreeNode left, TreeNode right) &#123;</span></span><br><span class="line"><span class="comment"> *         this.val = val;</span></span><br><span class="line"><span class="comment"> *         this.left = left;</span></span><br><span class="line"><span class="comment"> *         this.right = right;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDepth</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        Queue&lt;TreeNode&gt; queue=<span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        queue.add(root);</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(!queue.isEmpty())&#123;</span><br><span class="line">            <span class="keyword">int</span> size=queue.size();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;size;i++)&#123;</span><br><span class="line">                TreeNode node=queue.poll();</span><br><span class="line">                <span class="comment">//当这一层中出现叶子节点，说明这一层就为最小深度</span></span><br><span class="line">                <span class="keyword">if</span>(node.left==<span class="keyword">null</span> &amp;&amp; node.right==<span class="keyword">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> sum;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(node.left!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                    queue.add(node.left);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(node.right!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                    queue.add(node.right);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//每遍历一层，深度加1</span></span><br><span class="line">            sum+=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/05/19/%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6/">展开全文 >></a>
         </p>
       
 
