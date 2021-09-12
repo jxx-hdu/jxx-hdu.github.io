@@ -143,6 +143,95 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-哈希-快乐数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/">哈希-快乐数</a>
+    </h1>
+  
+
+        
+        <a href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/" class="archive-article-date">
+  	<time datetime="2021-04-18T11:38:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-04-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1.问题描述"></a>1.问题描述</h3><p>编写一个算法来判断一个数 n 是不是快乐数。</p>
+<p>「快乐数」定义为：</p>
+<p>对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。<br>然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。<br>如果 可以变为  1，那么这个数就是快乐数。<br>如果 n 是快乐数就返回 true ；不是，则返回 false 。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：19</span><br><span class="line">输出：true</span><br><span class="line">解释：</span><br><span class="line">12 + 92 &#x3D; 82</span><br><span class="line">82 + 22 &#x3D; 68</span><br><span class="line">62 + 82 &#x3D; 100</span><br><span class="line">12 + 02 + 02 &#x3D; 1</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：n &#x3D; 2</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>经过分析可得最后sum要么为1，返回true</p>
+<p>要么会出现环，此时sum会重复出现，</p>
+<p>所以本题采用set集合，如果set中包含sum，则返回false,否则将sum放入集合，如果sum==1返回true</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isHappy</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//如果最终等于1，则为快乐数</span></span><br><span class="line">        <span class="comment">//如果sum重复出现，则返回false</span></span><br><span class="line">        Set&lt;Integer&gt; set=<span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> sum=n;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            sum=getValue(sum);</span><br><span class="line">            <span class="keyword">if</span>(sum==<span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(set.contains(sum))&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            set.add(sum);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//计算值</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getValue</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(n!=<span class="number">0</span>)&#123;</span><br><span class="line">            sum+=((n%<span class="number">10</span>)*(n%<span class="number">10</span>));</span><br><span class="line">            n=n/<span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/04/18/%E5%93%88%E5%B8%8C-%E5%BF%AB%E4%B9%90%E6%95%B0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-奖学金" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -834,70 +923,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/03/07/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%85%88%E4%B8%AD%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-spring" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/07/spring/">spring</a>
-    </h1>
-  
-
-        
-        <a href="/2021/03/07/spring/" class="archive-article-date">
-  	<time datetime="2021-03-07T02:14:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-解释一下spring-bean的生命周期"><a href="#1-解释一下spring-bean的生命周期" class="headerlink" title="1.解释一下spring bean的生命周期"></a>1.解释一下spring bean的生命周期</h2><p>1.解析类得到BeanDefinition<br>2.如果有多个构造方法，则要推断构造方法<br>3.确定好构造方法后，进行实例化得到一个对象<br>4.对对象中加了@Autowired注解的属性进行填充<br>5.调用afterPropertiesSet()方法，该方法可以对没有加注解的属性进行注入<br>6.调用初始化方法<br>7.调用初始化后的方法，这里会进行AOP<br>9.如果当前创建的bean是单例bean，会把bean放入单例池<br>10.使用bean<br>11.Spring容器关闭时调用DisposableBean中destory()方法  </p>
-<h2 id="2-依赖注入-Autowired与-Resource的区别"><a href="#2-依赖注入-Autowired与-Resource的区别" class="headerlink" title="2.依赖注入@Autowired与@Resource的区别"></a>2.依赖注入@Autowired与@Resource的区别</h2><p>1.@Autowired<br>首先根据类型进行注入，如果根据类型在Spring中找到多个Bean,然后根据是不是符合Qualifier、优先级等进行进一步确认，最后在根据属性名确认。<br>2.@Resource<br>如果@Resource注解指定name属性，则直接从Spring容器中拿对应的Bean，如果不存在则表示没有找到注入对象，然后根据属性名字或setxxx中的xxx在Spring容器中找对应的Bean</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/07/spring/">展开全文 >></a>
         </p>
       
 
