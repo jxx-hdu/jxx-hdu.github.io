@@ -143,6 +143,106 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-动态代理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/09/19/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">动态代理</a>
+    </h1>
+  
+
+        
+        <a href="/2021/09/19/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" class="archive-article-date">
+  	<time datetime="2021-09-19T06:30:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-JDK动态代理"><a href="#1-JDK动态代理" class="headerlink" title="1.JDK动态代理"></a>1.JDK动态代理</h3><p>（1）使用JDK动态代理，使用Proxy类里面的方法创建代理对象（调用newProxyInstance）</p>
+<p><img src="../images/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/image-20210424213703337.png" alt="image-20210424213703337"></p>
+<p>方法中有三个参数：<br>第一个参数，类加载器</p>
+<p>第二个参数，增强方法所在的类，这个类实现的接口，支持多个接口</p>
+<p>第三个参数，实现这个接口InvocationHandler，创建代理对象，写增强的部分</p>
+<p>（2）编写JDK动态代理代码</p>
+<ul>
+<li>创建接口，定义方法</li>
+</ul>
+<p><img src="../images/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/image-20210424215042113.png" alt="image-20210424215042113"></p>
+<ul>
+<li><p>创建接口实现类，实现方法</p>
+<p><img src="../images/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/image-20210424215137702.png" alt="image-20210424215137702"></p>
+</li>
+<li><p>使用Proxy类创建接口实现类（UserDaoImpl）的代理对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JDKProxy</span> </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"> <span class="comment">//需要代理的类所属的接口</span></span><br><span class="line"> Class[] interfaces = &#123;UserDao.class&#125;;</span><br><span class="line"><span class="comment">//需要代理的类对象</span></span><br><span class="line"> UserDaoImpl userDao = <span class="keyword">new</span> UserDaoImpl();</span><br><span class="line"> <span class="comment">//创建代理类的对象</span></span><br><span class="line"> UserDao dao = (UserDao)Proxy.newProxyInstance(JDKProxy.class.getClassLoader(), interfaces, <span class="keyword">new</span> UserDaoProxy(userDao));</span><br><span class="line"> <span class="keyword">int</span> result = dao.add(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"> System.out.println(<span class="string">&quot;result:&quot;</span>+result);</span><br><span class="line"> &#125; &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代理对象所属的类（原来的逻辑和增强的逻辑）</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserDaoProxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line"> <span class="comment">//1 把创建的是谁的代理对象，把谁传递过来</span></span><br><span class="line"> <span class="comment">//有参数构造传递</span></span><br><span class="line"> <span class="keyword">private</span> Object obj;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">UserDaoProxy</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line"> <span class="keyword">this</span>.obj = obj;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">//增强的逻辑</span></span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> </span></span><br><span class="line"><span class="function">Throwable </span>&#123;</span><br><span class="line"> <span class="comment">//方法之前</span></span><br><span class="line"> System.out.println(<span class="string">&quot;方法之前执行....&quot;</span>+method.getName()+<span class="string">&quot; :传递的参</span></span><br><span class="line"><span class="string">数...&quot;</span>+ Arrays.toString(args));</span><br><span class="line"> <span class="comment">//被增强的方法执行</span></span><br><span class="line"> Object res = method.invoke(obj, args);</span><br><span class="line"> <span class="comment">//方法之后</span></span><br><span class="line"> System.out.println(<span class="string">&quot;方法之后执行....&quot;</span>+obj);</span><br><span class="line"> <span class="keyword">return</span> res;</span><br><span class="line"> &#125; &#125;</span><br></pre></td></tr></table></figure>
+<p>代理类继承了Proxy并实现了UserDao接口，所以JDK动态生成的代理类也实现了接口。</p>
+</li>
+</ul>
+<p>代理类中的add()方法又调用了InvocationHandler接口子实现类对象重写的invoke（）方法</p>
+<p>最终invoke()方法通过反射调用了被代理对象的add()方法</p>
+<h3 id="2-CGLIB动态代理"><a href="#2-CGLIB动态代理" class="headerlink" title="2.CGLIB动态代理"></a>2.CGLIB动态代理</h3><p>1.如果没有定义抽象主题类（接口），只定义了被代理类，显然JDK动态代理无法使用， 因为JDK动态代理要求必须定义抽象主题类（接口），使得代理类和被代理类可以实现其方法，这时就需要使用CGLIB动态代理。</p>
+<p>2.CGLIB为JDK动态代理提供了很好的补充</p>
+<p>3.使用CGLIB生成的代理类是被代理类的子类</p>
+<p>JDK动态代理生成的代理类是抽象主题类的子类</p>
+<ul>
+<li>被代理类（没有实现抽象主题类）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrainStation</span> </span>&#123;    </span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sell</span><span class="params">()</span> </span>&#123;       </span><br><span class="line">		System.out.println(<span class="string">&quot;火车站卖票&quot;</span>);    </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>生产代理对象的工厂（通过CGLIB生成代理对象）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//实现方法拦截接口MethodInterceptor，重写intercept方法，用于方法的拦截回调</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyFactory</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用CGLIB生成的代理类是被代理类的子类</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//声明被代理类对象</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> TrainStation station = <span class="keyword">new</span> TrainStation();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取代理对象，通过CGLIB获取</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 由于生成的代理类是被代理类的子类，所以返回类型为被代理类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TrainStation <span class="title">getProxyObject</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建Enhancer对象，类似JDK动态代理中的Proxy类</span></span><br><span class="line">        Enhancer enhancer = <span class="keyword">new</span> Enhancer();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//定义父类的字节码对象，即被代理类</span></span><br><span class="line">        enhancer.setSuperclass(TrainStation.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//定义回调函数，回调函数需要传递CallBack类对象</span></span><br><span class="line">        <span class="comment">//interface MethodInterceptor extends Callback，所以本类实现MethodInterceptor接口</span></span><br><span class="line">        enhancer.setCallback(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建代理对象</span></span><br><span class="line">        <span class="keyword">return</span> (TrainStation) enhancer.create();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//实现接口MethodInterceptor需要重写的intercept方法</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 通过生成的代理对象调用sell方法时会自动的执行重写的MethodInterceptor中的intercept方法</span></span><br><span class="line"><span class="comment">     * 代理类是被代理类的子类，所以拥有sell方法</span></span><br><span class="line"><span class="comment">     * 前三个参数与JDK动态代理中InvocationHandler重写的invoke方法类似，不再赘述</span></span><br><span class="line"><span class="comment">     * 第四个参数MethodProxy表示代理类封装的sell方法的对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 调用被代理类的方法时的返回值</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] objects, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;intercept方法执行了&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//此时仅仅是执行了intercept方法，还没有执行被代理对象的方法</span></span><br><span class="line">        System.out.println(<span class="string">&quot;接下来执行被代理类中的方法&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//调用被代理类的方法，不是通过反射机制！！！</span></span><br><span class="line">        <span class="comment">//参数1表示代理对象，参数2表示方法的参数</span></span><br><span class="line">        Object obj = methodProxy.invokeSuper(o, objects);</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>进行测试</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取代理对象</span></span><br><span class="line">        TrainStation proxyObject = <span class="keyword">new</span> ProxyFactory().getProxyObject();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//调用代理对象中的sell方法卖票</span></span><br><span class="line">        proxyObject.sell();</span><br><span class="line">        <span class="comment">//intercept方法执行了</span></span><br><span class="line">        <span class="comment">//接下来执行被代理类中的方法</span></span><br><span class="line">        <span class="comment">//火车站卖票</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/09/19/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-spring注册组件得几种方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -909,74 +1009,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/05/28/%E4%BA%8C%E5%8F%89%E6%A0%91-%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-二叉树-路径总和1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/27/%E4%BA%8C%E5%8F%89%E6%A0%91-%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C1/">二叉树-路径总和1</a>
-    </h1>
-  
-
-        
-        <a href="/2021/05/27/%E4%BA%8C%E5%8F%89%E6%A0%91-%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C1/" class="archive-article-date">
-  	<time datetime="2021-05-27T03:16:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-05-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-解题思路"><a href="#1-解题思路" class="headerlink" title="1.解题思路"></a>1.解题思路</h3><p>给你二叉树的根节点 <code>root</code> 和一个整数目标和 <code>targetSum</code> ，找出所有 <strong>从根节点到叶子节点</strong> 路径总和等于给定目标和的路径。</p>
-<p><strong>叶子节点</strong> 是指没有子节点的节点。</p>
-<p><img src="../images/%E4%BA%8C%E5%8F%89%E6%A0%91-%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C1/pathsumii1.jpg" alt="img"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：root = [<span class="number">5</span>,<span class="number">4</span>,<span class="number">8</span>,<span class="number">11</span>,<span class="keyword">null</span>,<span class="number">13</span>,<span class="number">4</span>,<span class="number">7</span>,<span class="number">2</span>,<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="number">5</span>,<span class="number">1</span>], targetSum = <span class="number">22</span></span><br><span class="line">输出：[[<span class="number">5</span>,<span class="number">4</span>,<span class="number">11</span>,<span class="number">2</span>],[<span class="number">5</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">5</span>]]</span><br></pre></td></tr></table></figure>
-<h3 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h3><p>本题遍历到每个节点，将节点加入list中，同时sum减去node.val，当遍历到叶子节点时，node.val==sum,说明当前路径符合要求，将其加入res中，如果不符合，则回溯。</p>
-<h3 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val, TreeNode left, TreeNode right) &#123;</span></span><br><span class="line"><span class="comment"> *         this.val = val;</span></span><br><span class="line"><span class="comment"> *         this.left = left;</span></span><br><span class="line"><span class="comment"> *         this.right = right;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; pathSum(TreeNode root, <span class="keyword">int</span> targetSum) &#123;</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; res=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;Integer&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        help(root,res,list,targetSum);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">help</span><span class="params">(TreeNode node,List&lt;List&lt;Integer&gt;&gt; res,List&lt;Integer&gt; list,<span class="keyword">int</span> targetSum)</span></span>&#123; <span class="comment">//list是引用类型</span></span><br><span class="line">        <span class="keyword">if</span>(node==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        list.add(node.val);</span><br><span class="line">        <span class="keyword">if</span>(node.left==<span class="keyword">null</span> &amp;&amp; node.right==<span class="keyword">null</span> &amp;&amp; targetSum==node.val)&#123; <span class="comment">//找到路径</span></span><br><span class="line">            res.add(<span class="keyword">new</span> ArrayList(list));</span><br><span class="line">            list.remove(list.size()-<span class="number">1</span>);<span class="comment">//回溯</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(node.left==<span class="keyword">null</span> &amp;&amp; node.right==<span class="keyword">null</span> &amp;&amp; targetSum!=node.val)&#123; <span class="comment">//找到叶子节点，不符合</span></span><br><span class="line">           list.remove(list.size()-<span class="number">1</span>);<span class="comment">//回溯</span></span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        help(node.left,res,list,targetSum-node.val);</span><br><span class="line">        help(node.right,res,list,targetSum-node.val);</span><br><span class="line">        list.remove(list.size()-<span class="number">1</span>);<span class="comment">//回溯，把当前这个值使用完之后把它移除</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/05/27/%E4%BA%8C%E5%8F%89%E6%A0%91-%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C1/">展开全文 >></a>
         </p>
       
 

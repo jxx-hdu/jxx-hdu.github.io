@@ -143,6 +143,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-剑指offer-树的子结构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/10/%E5%89%91%E6%8C%87offer-%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/">我的博客</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/10/%E5%89%91%E6%8C%87offer-%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/" class="archive-article-date">
+  	<time datetime="2021-01-10T12:32:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="1-题目要求"><a href="#1-题目要求" class="headerlink" title="1.题目要求"></a>1.题目要求</h2><p>输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）</p>
+<hr>
+<h2 id="2-解题思路"><a href="#2-解题思路" class="headerlink" title="2.解题思路"></a>2.解题思路</h2><p>先从跟节点判断B是不是A的子结构，如果不是，再分别从左右两个子树进行判断，只要有一个是，则说明B是A的子结构</p>
+<hr>
+<h2 id="3-参考代码"><a href="#3-参考代码" class="headerlink" title="3.参考代码"></a>3.参考代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class Solution &#123;</span><br><span class="line">    public boolean HasSubtree(TreeNode root1,TreeNode root2) &#123;</span><br><span class="line">        if(root1&#x3D;&#x3D;null || root2&#x3D;&#x3D;null)&#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F;先从跟节点判断B是不是A的子结构，如果不是，再分别从左右两个子树进行判断，只要有一个是，则说明B是A的子结构</span><br><span class="line">        return digui(root1,root2)||HasSubtree(root1.left,root2)||HasSubtree(root1.right,root2);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public boolean digui(TreeNode root1,TreeNode root2)&#123;</span><br><span class="line">        &#x2F;&#x2F;如果root2为空，说明B已经访问结束，确定为A的子结构</span><br><span class="line">        if(root2&#x3D;&#x3D;null)&#123;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        if(root1&#x3D;&#x3D;null || root1.val!&#x3D;root2.val)&#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        return digui(root1.left,root2.left) &amp;&amp; digui(root1.right,root2.right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/10/%E5%89%91%E6%8C%87offer-%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
